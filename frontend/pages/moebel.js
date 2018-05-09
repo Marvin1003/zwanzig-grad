@@ -1,0 +1,76 @@
+import Wrapper from '../components/Wrapper';
+
+import Lazy from '../components/Utility/LazyLoading';
+import Button from '../animation/components/hover/ButtonHover';
+
+import style from '../styles/pages/moebel';
+
+export default (props) => (
+  <Wrapper title="Moebel" links={['Parkett', 'Treppe', 'Innenausbau']} type="topic">
+    <style jsx>{style}</style>
+    <section className="section sec_two_moebel">
+      <Lazy
+        type={1}
+        master={2}
+        imgType="parkett"
+        cookie="parkett2"
+        alt="parkett2"
+        imgTag
+      />
+      <div className="sec_two_box" />
+      <div className="sec_text sec_two_text">
+        <h2 className="didonesque_headline">Erfahrung.</h2>
+        <p className="normal_text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <Button
+          name="Ansehen"
+          link="#"
+          borderSize="2px"
+          color="#C1C12B"
+          secondEase="Sine.easeOut"
+          duration={0.75}
+        />
+      </div>
+    </section>
+    <section className="section sec_three_moebel">
+      <h1 className="geomanist_headline sec_three_headline">Sorgfältig</h1>
+      <Lazy
+        type={1}
+        master={3}
+        imgType="parkett"
+        cookie="parkett3"
+        alt="parkett3"
+        imgTag
+      />
+      <div className="sec_text sec_three_text">
+        <h2 className="didonesque_headline">Materialien.</h2>
+        <p className="normal_text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+      </div>
+    </section>
+    <section className="section sec_four_moebel">
+      <Lazy
+        type={1}
+        master={1}
+        imgType="parkett"
+        cookie="parkett1"
+        alt="parkett1"
+        imgTag
+      />
+      <Lazy
+        type={1}
+        master={2}
+        imgType="parkett"
+        cookie="parkett2"
+        alt="parkett2"
+        imgTag
+      />
+      <Lazy
+        type={1}
+        master={3}
+        imgType="parkett"
+        cookie="parkett3"
+        alt="parkett3"
+        imgTag
+      />
+    </section>
+  </Wrapper>
+);
