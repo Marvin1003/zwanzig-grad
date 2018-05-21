@@ -25,13 +25,9 @@ export default css`
   }
 
   //-------------------------------------
-
-  
-  $spacingDesktop: 7.8125vw;
-
-  body {
-    height: 100% !important;
-  }
+  $layoutGAP: 10vw;
+  $zwanzig-grad-rot: #6D2A2A;
+  $zwanzig-grad-gruen: #C1C12B;
 
   :global(section) {
     display: inline-block;
@@ -39,74 +35,33 @@ export default css`
     height: 100%;
     width: 100%;
   }
-  :global(.section_background_wrapper) {
-    background-color: #F3F4F7;
-    perspective: 400px;
-  }
 
-  .innerContainer {
-    @include responsive('tablet-wide', max) {
-      position: relative;
-      top: 50px;
-      left: 50px;
-  
-      height: calc(100% - 100px);
-      width: calc(100% - 100px);
-    }
-
-    .content {
-      user-select: none;
-      position: absolute;
-      display: flex;
-      left: 50%;
-      transform: translateX(-50%);
-      @include responsive('tablet-wide', max) {
-        top: 50%;
-        flex-direction: column;
-      }
-      @include responsive('tablet-wide', min) {
-        bottom: 0;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end;
-      }
-    }
-  }
-  
-  .topic_subtext {
-    min-width: 100px;
-    max-width: 300px;
-    padding-left: 15px;
-    color: inherit;
-    font-size: 14px;
-    text-align: left;
-    border-left: 1px solid #C1C12B;
-    line-height: 1 !important; 
-    @include responsive('tablet-wide', min) {
-      font-size: 16px;
-      margin-left: 25px;
-    }
-  }
-  // THIS TOPIC CONTAINER IS IMPORTANT AS WE CANT USE TRANSLATEY ON TOPIC ITSELF - ANIMATION OVERWRITES IT - 
   .topic_container {
-    @include responsive("tablet-wide", max) {
+    display: inline-block;
+    position: fixed;
+    overflow: hidden;
+    user-select: none;
+    top: 50%;
+    @include responsive('phone-wide', min) {
+      left: 33.33%;
       transform: translateY(-50%);
+    }
+    @include responsive('phone-wide', max) {
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     .topic {
       white-space: nowrap;
-      overflow: hidden;
-      font-size: 16px;
       max-width: 100%;
-      margin: 0;
-      text-transform: lowercase;
-      font-size: 24px;
-      word-wrap: break-word;
+      text-transform: capitalize;
       @include responsive('tablet-wide', min) {
-        line-height: 0.9;
+        font-size: 50px;
+      }
+      @include responsive('tablet-wide', max) {
         font-size: 30px;
       }
-      :global(.topic_chars):first-child {
-        text-transform: capitalize;
+      @media only screen and (max-width: 350px) {
+        font-size: 24px;
       }
     }
   }
@@ -133,18 +88,19 @@ export default css`
 
   :global(.snake_container) {
     @include responsive('tablet-wide', min) {
-      position: absolute;
-      top: calc(#{$spacingDesktop} + 50px);
-      left: calc(#{$spacingDesktop} + 50px);
-  
-      height: calc((100% - #{$spacingDesktop} * 2) - 100px);
-      width:  calc((100% - #{$spacingDesktop} * 2) - 100px);
-      z-index: 100;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 1;
     }
   }
 
   :global(.home_container) {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     & > :global(section):first-child {
@@ -153,20 +109,12 @@ export default css`
   }
 
   .layout {
+    width: 100%;
+    height: calc(100% - #{$layoutGAP});
+    position: relative;
+    top: $layoutGAP;
     color: white;
-    position: fixed;
-    top: $spacingDesktop;
-    left: $spacingDesktop;
-    height: calc(100% - #{$spacingDesktop} * 2);
-    width: calc(100% - #{$spacingDesktop} * 2);
     z-index: 10;
-    @media only screen and (orientation: landscape) {
-      top: $spacingDesktop / 2;
-      left: $spacingDesktop / 2;
-      height: calc(100% - #{$spacingDesktop / 2} * 2);
-      width: calc(100% - #{$spacingDesktop / 2} * 2);
-    }
-
     .side {
       user-select: none;
       position: absolute;
@@ -186,6 +134,7 @@ export default css`
       position: absolute;
       bottom: 0;
       z-index: 1;
+      cursor: pointer;
     }
 
     :global(.right) {

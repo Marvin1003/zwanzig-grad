@@ -1,5 +1,4 @@
 import { PureComponent } from 'react';
-import Link from 'next/link';
 import { hoverIn, hoverOut } from './hover';
 
 export default class TextHover extends PureComponent {
@@ -98,16 +97,12 @@ export default class TextHover extends PureComponent {
           onMouseEnter={this.hoverIn}
           onMouseLeave={this.hoverOut}
         >
-          <Link href={this.props.link}>
-            <a style={this.style.elem}>
-              {this.props.name}
-            </a>
-          </Link>
-          <Link href={this.props.link}>
-            <a ref={this.effect} style={Object.assign({},this.style.effect, this.props.effectStyle)}>
-              {this.props.name}
-            </a>
-          </Link>
+          <a style={this.style.elem}>
+            {this.props.name}
+          </a>
+          <a ref={this.effect} style={Object.assign({},this.style.effect, this.props.effectStyle)}>
+            {this.props.name}
+          </a>
         </Tag>
       );
 

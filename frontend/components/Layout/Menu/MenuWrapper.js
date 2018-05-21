@@ -1,44 +1,94 @@
-import { PureComponent } from 'react';
-import { Consumer } from '../../Context';
+import { RouterContext } from '../../Context/Router';
 
 import Desktop from './MenuDesktop';
 import Mobile from './MenuMobile';
 
-import { Close } from '../../../../static/svg/svg';
+class Menu extends React.Component {
+  state = {
+    reverse: false
+  }
+  duration = 0.75;
 
-
-class Menu extends PureComponent {
   componentDidMount() {
     window.onkeydown = this.onEscape;
+    this.menuIcon = document.querySelectorAll('.menuicon')[0];
+
+    this.strokes = this.menuIcon.querySelectorAll('line');
+    this.animateMenuIcon('open');
+    this.menuIcon.addEventListener("click", this.toggleMenu);
   }
 
   componentWillUnmount() {
+    this.menuIcon.removeEventListener("click", this.toggleMenu);
     window.onkeydown = null;
+  }
+
+  toggleMenu = () => {
+    if(this.state.reverse)
+      this.animateMenuIcon('open');
+    if(!this.state.reverse)
+      this.animateMenuIcon('close');
+      
+    this.setState((prevState) => ({ reverse: !prevState.reverse }));
+  }
+
+  animateMenuIcon(type) {
+    if(type === 'open') {
+      var rotation = 45;
+      var y = 4.25;
+      var color = 'black';
+    }
+    else {
+      var rotation = 0;
+      var y = 0;
+      if(location.pathname !== '/')
+        var color = 'black';
+      else 
+        var color = 'white';
+    }
+
+    TweenLite.to(this.menuIcon, this.duration, { color, ease: Power4.easeOut });
+  
+    TweenLite.fromTo(this.strokes[0], this.duration, { transformOrigin: '50% 0%'}, { rotation, y, ease: Power4.easeOut });
+    TweenLite.fromTo(this.strokes[1], this.duration, { transformOrigin: '50% 0%'}, { rotation: -rotation, y: -y, ease: Power4.easeOut });
+  }
+
+  routeHandling = (req) => {
+    if(req === location.pathname.slice(1)) {
+      this.setState((prevState) => {
+        if(!prevState.reverse) {
+          this.animateMenuIcon('close');
+          return { reverse: true };
+        }
+      })
+    } else 
+      this.props.context.toggleMenu(req);
   }
 
   // CLOSE MENU ON ESC
   onEscape = (e) => {
-   (e.keyCode === 27) && this.props.context.toggleMenu('button');
+   (e.keyCode === 27) && this.toggleMenu();
   }
 
   renderContent() {
     if(this.props.context.device === 'desktop')
-      return <Desktop svg={Close} {...this.props.context} />;
+      return <Desktop routeHandling={this.routeHandling} reverse={this.state.reverse} {...this.props.context} />;
     else if(this.props.context.device === 'mobile') 
-      return <Mobile svg={Close} {...this.props.context} />;
+      return <Mobile routeHandling={this.routeHandling} reverse={this.state.reverse} {...this.props.context}  />;
     return null;
   }
 
   render() {
     return (
       <div className="menu">
+        <div className="background_animation_mobile" />
         <style jsx>{`
           .menu {
             position: fixed;
             top: 0;
             left: 0;
             height: 100%;
-            z-index: 1000;
+            z-index: 100;
           }
         `}</style>
           {this.renderContent()}
@@ -48,7 +98,7 @@ class Menu extends PureComponent {
 }
 
 export default (props) => (
-  <Consumer>
-    {(context) => <Menu {...props} context={context} />}
-  </Consumer>
+  <RouterContext.Consumer>
+    {(nextRoute) => <Menu {...props} context={nextRoute} />}
+  </RouterContext.Consumer>
 )

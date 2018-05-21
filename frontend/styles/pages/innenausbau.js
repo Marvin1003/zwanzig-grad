@@ -64,6 +64,8 @@ export default css`
   }
 
   //-------------------------------------
+  $layoutGAP: 10vw;
+  $zwanzig-grad-rot: #6D2A2A;
 
   // SECTION TWO
   .sec_two_innenausbau {
@@ -75,11 +77,12 @@ export default css`
         @include parallax(-1);
         @include calcDistance(bottom, 0vh, -1);
         @include calcDistance(left, 70% , -1);
+        @include calcMarginPadding(0, margin, 0px, 0px, 0px, $layoutGAP);                 
         margin-left: 50px;
         position: absolute;
         width: 30%;
         height: 22.685185185185185vh;
-        background-color: #C1C12B;
+        background-color: $zwanzig-grad-rot;
       }
     }
     .sec_two_text {
@@ -88,7 +91,7 @@ export default css`
       }
       @include responsive("tablet-wide", min){
         position: absolute;
-        left: 13.0208333333vw;
+        left: 15%;
         bottom: 50vh;
       }
     }
@@ -96,15 +99,15 @@ export default css`
       @include responsive("tablet-wide", min){
         @include parallax(-2);
         @include calcDistance(bottom, 5vh, -2);
-        @include calcDistance(left, calc(66.67777vw - 150px), -2);
-        @include calcMarginPadding(-1, margin, 0px,0px,0px, 50px);
+        @include calcDistance(left, 45%, -2);
+        @include calcMarginPadding(-1, margin, 0px, 0px, 0px, $layoutGAP);                 
         position: absolute;
-        width: 33.3333333333vw;
-        height: 75.9259259259vh;
+        width: 40%;
+        height: 75vh;
       }
       @include responsive("tablet-wide", max){
-        height: 75vh;
-        margin-top: 50px;
+        height: 30vh;
+        margin-top: 100px;
         width: 100%;
         div{
           height: 100%;
@@ -120,20 +123,21 @@ export default css`
     }
     .sec_three_text {
       @include responsive("tablet-wide", min){
-        bottom: 15vh;
-        left: calc(66.67777vw - 150px);
         position: absolute;
+        bottom: 15vh;
+        left: 85%;
+        transform: translateX(-100%);
       }
     }
     :global([data-name="lazy"]) {
       @include responsive("tablet-wide", min){
         @include parallax(-1);
-        @include calcDistance(left, 13.0208333333vw, -1);
-        margin-left: 50px;
+        @include calcDistance(left, 15%, -1);
+        @include calcMarginPadding(0, margin, 0px, 0px, 0px, $layoutGAP);                 
         position: absolute;
         bottom: -5vh;
-        width: 33.3333333333vw;
-        height: 75.9259259259vh;
+        width: 40%;
+        height: 75vh;
       }
       @include responsive("tablet-wide", max) {
         position: relative;
@@ -153,9 +157,10 @@ export default css`
     .sec_four_headline {
       @include responsive("tablet-wide", min){
         @include parallax(-2, -180deg);
-        @include calcDistance(left, 50px, -2);
-        bottom: -75vh;
-        }
+        @include calcDistance(left, 50px, 0);
+        @include calcMarginPadding(-1, margin, 0px, 0px, 0px, $layoutGAP);                 
+        bottom: -50vh;
+      }
       @include responsive("tablet-wide", max) {
         margin-bottom: 25px;
       }
@@ -166,7 +171,7 @@ export default css`
       }
       @include responsive("tablet-wide", min){
         position: absolute;
-        left: 64.0625vw;
+        right: 0;
         bottom: 20vh;
       }
     }
@@ -174,11 +179,11 @@ export default css`
       @include responsive("tablet-wide", min){
         position: absolute;
         @include parallax(-1);
-        @include calcDistance(left, 15.625vw , -1);
-        @include calcDistance(bottom, 0px , -1);
+        @include calcDistance(left, 15% , -1);
+        @include calcMarginPadding(0, margin, 0px, 0px, 0px, $layoutGAP);                 
         width: 40.625vw;
         height: 59.2592592593vh;
-        margin-left: 50px;
+        bottom: 0;
       }
       @include responsive("tablet-wide", max){
         width: 100%;

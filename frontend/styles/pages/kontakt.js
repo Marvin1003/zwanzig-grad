@@ -25,6 +25,7 @@ export default css`
   }
 
   //-------------------------------------
+  $layoutGAP: 10vw;
 
   .container {
     * {
@@ -34,52 +35,45 @@ export default css`
     position: absolute;
     @include responsive('tablet-wide', max) {
       display: flex;
-      top: 50px;
-      // 100px == 2xNavHeight
       flex-direction: column;
     }
-    >:global(div):first-of-type {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .wrapper {
       position: relative;
-      padding: 50px 0 37.5px 0;
-      margin: 0 auto;
+      min-height: 600px;
+      height: 100vh;
       @include responsive('tablet-wide', min) {
-        position: absolute;
-        top: 0;
-        left: 0;
-        min-height: calc(100vh - 75px);
-        margin: 75px 50px 0 50px;
-        width: calc(50% - 100px);
+        width: 50%;
       }
       @include responsive('tablet-wide', max) {
-        // REMINDER
-        min-height: calc(100vh - 50px);
-        width: calc(100% - 100px);
+        width: 100%;
       }
-      @include responsive('phone-wide', max) {
-        padding: 30px 0 25px 0;
-        width: calc(100% - 75px);
-      }
+    }
+    .layout_wrapper {
+      display: flex;
+      align-items: center;
+      position: relative;
+      top: $layoutGAP;
+      bottom: $layoutGAP;
+      height: calc(100% - (#{$layoutGAP} * 2));
     }
     >:global(div):last-of-type {
       overflow: hidden;
+      height: 100vh;
       @include responsive('tablet-wide', min) {
         position: fixed;
         top: 0;
         right: 0;
         width: 50%;
-        height: 100vh;
       }
       @include responsive('tablet-wide', max) {
-        height: calc(100vh - 50px);
         width: 100%;
       }
     }
   }
 
   .address {
+    position: absolute;
+    bottom: 0;
     font-weight: inherit;
     color: rgba(0,0,0,0.5);
     font-size: 10px;
@@ -91,17 +85,6 @@ export default css`
     }
   }
   
-  .headline {
-    font-weight: inherit;
-    align-self: flex-start;
-    font-size: 22px;
-    letter-spacing: 3.5px;
-    text-transform: uppercase;
-    @include responsive('tablet-wide', min) {
-      top: 112.5px;
-    }
-  }
-
   //-------------------------------------
   
 `;

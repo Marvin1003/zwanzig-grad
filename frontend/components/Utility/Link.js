@@ -1,11 +1,13 @@
-import { Consumer } from '../Context';
+import { RouterContext } from '../Context/Router';
 
 const Link = (props) => (
-  <a className={props.className} onClick={() => props.nextRoute(props.href)}>{props.children}</a>
+  <a className={props.className} onClick={() => props.nextRoute(props.href)}>
+    {props.children}
+  </a>
 );
 
 export default (props) => (
-  <Consumer>
-    {({nextRoute}) => <Link {...props} nextRoute={nextRoute} />}
-  </Consumer>
+  <RouterContext.Consumer>
+    {(nextRoute) => <Link {...props} {...nextRoute} />}
+  </RouterContext.Consumer>
 );

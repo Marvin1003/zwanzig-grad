@@ -1,39 +1,28 @@
-import { PureComponent, Fragment } from "react";
+import { RouterContext } from './Context/Router';
 
-import Loader from "./Loader/PageLoader";
-
-import dynamic from "next/dynamic";
-
-import "./imports";
 import Head from "./Head";
+import Menu from './Layout/Menu/MenuWrapper';
+import Header from './Layout/Header/Header';
+import SecOne from './Sections/SecOne';
+import SecNext from './Sections/SecNext';
 
-import { Consumer } from './Context';
-/* eslint-disable */
+import style from '../styles/global/common';
 
-const Components = {
-  index: dynamic(import("../pages/index"), { loading: () => null }),
-  parkett: dynamic(import("../pages/parkett"), { loading: () => null }),
-  treppe: dynamic(import("../pages/treppe"), { loading: () => null }),
-  moebel: dynamic(import("../pages/moebel"), { loading: () => null }),
-  innenausbau: dynamic(import("../pages/innenausbau"), { loading: () => null }),
-  kontakt: dynamic(import("../pages/kontakt"), { loading: () => null }),
-  impressum: dynamic(import("../pages/impressum"), { loading: () => null })
-};
+const Topic = (props) => (
+  <div className="parallax">
+    <SecOne title={props.title} />
+    {props.component}
+    <SecNext next={props.next} />
+  </div>
+);
 
-class App extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    //STATE
-    this.state = {
-      showLoader: false,
-      loadComplete: false
-    }
+class App extends React.Component {
+  static defaultProps = {
+    className: 'default'
   }
-
+  
   componentDidMount() {
     if(!window.APP) {
-      // this.registerSW();
       window.APP = {
         nextSection: 0,
         prevSection: 0,
@@ -43,58 +32,33 @@ class App extends PureComponent {
         updateCurrent: null,
         updateImages: null,
       }
+    }
 
-      this.setState({ showLoader: true });
-    } else 
-      this.loadComponent();
+    this.props.setMountState(true);
+
+    (this.props.title !== 'Home') && TweenLite.set(document.body, { clearProps: 'transform' });
   }
 
-  // registerSW() {
-  //   // REGISTER SERVICE - WORKER
-  //   if ('serviceWorker' in navigator) {
-  //     // Use the window load event to keep the page load performant
-  //     window.addEventListener('load', () => {
-  //       navigator.serviceWorker.register('/sw.js');
-  //     });
-  //   }
-  // }
-
-  loadComponent = () => {
-    // LOAD MAIN PAGE
-    this.setState({ loadComponent: true })
-  }
-
-  removeLoader = () => {
-    // REMOVE LOADER
-    document.cookie = "loader=true";
-    this.props.context.acceptCookies();
-    this.setState({ showLoader: false })
-  }
-
-  render() {
-    const Page = Components[this.props.component];
+  render() {
     return (
-      <Fragment>
-        <Head title={this.props.context.title} />
-        {this.state.showLoader
-          ? <Loader 
-              removeMe={this.removeLoader} 
-              loadComponent={this.loadComponent} 
-              pageMounted={this.props.context.pageMounted} 
-            />
+      <div className={this.props.className}>
+        <Head title={this.props.title} /> 
+        <Header {...this.props} dynamicHeader={this.props.dynamicHeader} />
+        {this.props.menu
+          ? <Menu /> 
           : null
         }
-        {this.state.loadComponent
-          ? <Page />
-          : null
+        {this.props.type === 'topic' 
+        ? <Topic {...this.props} component={this.props.children} />
+        : this.props.children
         }
-      </Fragment>
+      </div>
     );
   }
 }
 
 export default (props) => (
-  <Consumer>
-    {(context) => <App {...props} context={{...context}} /> }
-  </Consumer>
-)
+  <RouterContext.Consumer>
+    {(nextRoute) => <App {...props} {...nextRoute} /> }
+  </RouterContext.Consumer>
+);

@@ -27,34 +27,46 @@ export default css`
   //-------------------------------------
 
   // DEFAULT 
+  
+  $layoutGAP: 10vw;
+  
   .standard_nav {
-    width: 100%;
+    width: 100vw;
     position: fixed;
-    top: 0;
     left: 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    background-color: #F3F4F7;  
-    border-bottom: 1px solid #EAEAEA;
-    transition: height .5s cubic-bezier(.91,0,.17,.99);
-    transform: translate3d(0,0,0);
-    z-index: 100;
-    @include responsive("tablet-wide", min) {
-      height: 75px;
+    color: black;
+    z-index: 101;
+    .background {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0; 
+      left: 0;
+      background: white;
+      transform-origin: 0 0;
+      transform: scaleY(0);
     }
-    @include responsive("tablet-wide", max) {
-      height: 50px;
+
+    .menuicon {
+      position: absolute;
+      top: $layoutGAP;
+      right: $layoutGAP;
+      align-self: flex-start;
+      width: 20px;
+      :global(line) {
+        stroke-width: 2px;
+        stroke: currentcolor;
+      }
     }
+
     :global(.logo) {
+      position: absolute;
+      top: $layoutGAP;
+      left: $layoutGAP;
+      cursor: pointer;
       user-select: none;
-      position: relative;
-      @include responsive("phone-wide", min) {
-        left: 50px;
-      }
-      @include responsive("phone-wide", max) {
-        left: 37.5px;
-      }
       img {
         pointer-events: none;
         user-select: none;
@@ -66,99 +78,60 @@ export default css`
         }
       }
     }
-    .menu {
-      display: flex;
-      position: relative;
-      .menu_icon {
-        @extend .menuicon;
-        width: 30px;
-      }
-      @include responsive("phone-wide", min) {
-        right: 50px;
-      }
-      @include responsive("phone-wide", max) {
-        right: 37.5px;
-      }
-    }
   }
-  .menuicon {  
-    display: flex;
-    flex-direction: column;
-    height: 13px;
-    width: 30px;
-    align-items: center;
-    justify-content: space-between;
-    overflow-x: hidden;
-    cursor: pointer;
-    &> div {
-      position: relative;
-      display: flex;
-      left: -5px;
-      &> div {
-        background-color: currentcolor;
-        height: 2px;
-      }
-    }
-    &> div:first-child > div:first-child {
-      width: 22.5px;
-      margin-right: 7.5px;
-    }
-    &> div:nth-child(2) > div:first-child {
-      width: 25px;
-      margin-right: 5px;
-    }
-    &> div:last-child > div:first-child {
-      width: 17.5px;
-      margin-right: 12.5px;
-    }
-    &> div > div:last-child {
-      width: 10px;
-    }
-  }
-
 
   //-------------------------------------
 
   // HOME 
-  $spacingDesktop: 7.8125vw;
-  
   .header_home {
     color: white;
-    background-color: transparent;
-    padding: $spacingDesktop $spacingDesktop 0 $spacingDesktop;
-    height: auto;
-    align-items: flex-start;
-    border-bottom: 0;
-    @media only screen and (orientation: landscape) {
-      padding: $spacingDesktop / 2 $spacingDesktop / 2 0 $spacingDesktop / 2;
-    }
-    
-    .menu {
-      right: 0;
-    }
-    :global(.logo) {
-      left: 0;
-    }
-    .icon {
-      right: 0;
-    }
-    @include responsive("tablet-wide", max) {
-      background-color: transparent;
-    }
-  }
-
-  //-------------------------------------
-  
-  // CONTACT 
-  .header_contact {
-    @include responsive('tablet-wide', min) {
-      width: 50%;
-    }
-    @include responsive('phone-wide', max) {
-      width: 100%;
-    }
   }
 
   //-------------------------------------
 
 `;
+
+
+// .menu_icon_wrapper {
+//   display: flex;
+//   position: relative;
+//   .menu_icon {
+//     @extend .menuicon;
+//     width: 30px;
+//   }
+// }
+
+// .menuicon {  
+//   display: flex;
+//   flex-direction: column;
+//   height: 13px;
+//   width: 30px;
+//   align-items: center;
+//   justify-content: space-between;
+//   overflow-x: hidden;
+//   cursor: pointer;
+//   &> div {
+//     position: relative;
+//     display: flex;
+//     left: -5px;
+//     &> div {
+//       background-color: currentcolor;
+//       height: 2px;
+//     }
+//   }
+//   &> div:first-child > div:first-child {
+//     width: 22.5px;
+//     margin-right: 7.5px;
+//   }
+//   &> div:nth-child(2) > div:first-child {
+//     width: 25px;
+//     margin-right: 5px;
+//   }
+//   &> div:last-child > div:first-child {
+//     width: 17.5px;
+//     margin-right: 12.5px;
+//   }
+//   &> div > div:last-child {
+//     width: 10px;
+//   }
+// }

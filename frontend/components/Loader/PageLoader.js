@@ -1,7 +1,5 @@
 
-import { Fragment, PureComponent } from 'react';
-
-import fakeBar from '../../animation/fakeBar';
+import { PureComponent } from 'react';
 import toSpan from '../../functions/helper/toSpan';
 import style from '../../styles/components/common/pageLoader';
 
@@ -19,11 +17,11 @@ export default class extends PureComponent {
 
     this.cookieMessageDuration =  0.75;
     this.cookieMessageStaggerDelay = 0.04;
+    this.distance = 200;
   }
 
   componentDidMount() {
-    fakeBar.call(this, this.loader.current);
-    this.props.loadComponent();
+    this.componentReady();
 
     // TO PREVENT OVERSCROLLING ON IOS
     window.addEventListener('touchmove', this.preventTouch, { passive: false });
@@ -37,83 +35,53 @@ export default class extends PureComponent {
     e.preventDefault();
   }
 
-  componentDidUpdate() {
-    this.componentReady();
-  }
-
   componentReady = () => {
-    if(this.props.pageMounted) {
-      toSpan(this.textZwanzig.current, 'animate_text_zwanzig');
-      toSpan(this.textCookie.current, 'animate_text_cookie');
-
-      TweenLite.set('.cookie_message', { opacity: 1 });
-
-      this.firstTL = new TimelineLite({ onComplete: this.checkCookie });
-      this.secondTL = new TimelineLite({ paused: true });
-      
-      this.firstTL
-        .to(this.loader.current, 1, { scaleX: 1, ease: 'zwanzig-grad' })
-        .to(this.loader.current, 1, { scaleY: 1, ease: 'zwanzig-grad'})
-        .staggerFromTo('.animate_text_zwanzig', this.cookieMessageDuration, { opacity: 0, x: 150 }, { opacity: 1, x: 0, ease: 'zwanzig-grad' }, this.cookieMessageStaggerDelay)
-        .set(this.loader.current.parentNode, { backgroundColor: '#132B51' });
-        
-      this.secondTL
-        .staggerTo('.animate_text_zwanzig', this.cookieMessageDuration, { opacity: 0, x: -150, delay: 0.5 }, this.cookieMessageStaggerDelay)
-        .staggerFromTo('.animate_text_cookie', this.cookieMessageDuration, { opacity: 0, x: 150 }, { opacity: 1, x: 0, ease: 'zwanzig-grad' }, this.cookieMessageStaggerDelay)
-        .to('.button', 1, { y: -150, ease: 'zwanzig-grad' });
-    }
-  }
+    TweenLite.set('.cookie_message', { visibility: 'visible' })
   
-  checkCookie = () => {
-    document.cookie.includes('loader')
-      ? setTimeout(() => this.fadeOut(false), 500)
-      : this.secondTL.play();
+    toSpan(this.textZwanzig.current, 'animate_text_zwanzig');
+
+    this.firstTL = new TimelineLite({ onComplete: this.fadeOut });
+    this.secondTL = new TimelineLite({ paused: true });
+    
+    this.firstTL
+      .staggerFromTo('.animate_text_zwanzig', this.cookieMessageDuration, 
+        { alpha: 0, x: this.distance }, 
+        { alpha: 1, x: 0, ease: Power4.easeOut }, this.cookieMessageStaggerDelay);
   }
 
-  fadeOut = (cookieText) => {
-    if(cookieText) {
-      var target = '.animate_text_cookie';
-      var delay = 1.25;
-      var duration = 0.5;
-    } else {
-      var target = '.animate_text_zwanzig';
-      var delay = 0.5;
-      var duration = 0.75;
-    }
+  fadeOut = () => {
+    const target = '.animate_text_zwanzig';
+    const duration = 0.75;
 
-    const targetSection = document.querySelectorAll('.home_container > section');
+    const targetSection = document.querySelectorAll('.home_container > section')[0];
     
-    const lastTL = new TimelineLite();
+    const lastTL = new TimelineLite({ onComplete: this.props.removeMe });
 
     lastTL
       .to(this.buttonAnimation.current, 0.5, { scaleX: 1 })
-      .staggerTo(target, duration, { opacity: 0, x: -150 }, this.cookieMessageStaggerDelay, 0)
-      .to(this.loader.current, 1.5, { xPercent: -100, ease: 'zwanzig-grad'}, delay)
-      .to(this.loader.current.parentNode, 1.5, { xPercent: -100, onComplete: this.props.removeMe, ease: 'zwanzig-grad' }, delay + 0.1);
+      .staggerTo(target, duration, { opacity: 0, x: -this.distance }, this.cookieMessageStaggerDelay)
+      .to(this.loader.current, 1.5, { xPercent: -100, ease: 'zwanzig-grad'}, "-=0.5")
+      .to(this.loader.current.parentNode, 1.5, { xPercent: -100, onComplete: this.props.removeMe, ease: 'zwanzig-grad' }, "-=1.4");
 
-    if(targetSection.length > 0) {
-      lastTL.fromTo(targetSection[window.APP.nextSection], 1.5, { alpha: 1, xPercent: 50 }, {
-          xPercent: 0,
-          ease: 'zwanzig-grad'
-        }, delay + 0.1);
+    if(targetSection) {
+      lastTL.fromTo(targetSection, 1.5, 
+        { alpha: 1, xPercent: 50, visibility: 'visible' }, 
+        { xPercent: 0, ease: 'zwanzig-grad' }, 1.2);
     }
   }
   
   render() {
     return (
-      <Fragment>
+      <div className="wrapper">
         <style jsx>{style}</style>
-        <div className="wrapper">
-          <div ref={this.loader} className="loader didonesque_normal">
-            <div ref={this.textZwanzig} className="cookie_message">zwanzig-grad</div>
-            <div ref={this.textCookie} className="cookie_message">Wir nutzen Cookies um Ihnen das angenehmste Erlebnis bieten zu können.</div>
-            <button onClick={this.fadeOut} className="button">
-              Akzeptieren
-              <div ref={this.buttonAnimation} className="buttonAnimation" />
-            </button>
-            </div>
-        </div>
-      </Fragment>
-    )
+        <div ref={this.loader} className="loader didonesque_normal">
+          <div ref={this.textZwanzig} className="cookie_message">zwanzig-grad</div>
+          <button onClick={this.fadeOut} className="button">
+            <span className="button_text">Akzeptieren</span>
+            <div ref={this.buttonAnimation} className="buttonAnimation" />
+          </button>
+          </div>
+      </div>
+    );
   }
 }

@@ -1,6 +1,7 @@
 import css from 'styled-jsx/css';
 
 export default css`
+  $zwanzig-grad-rot: #6D2A2A;
   // LOADER 
   .wrapper {
     position: fixed;
@@ -9,35 +10,39 @@ export default css`
     z-index: 1000;
     height: 100%;
     width: 100%;
-    background-color: #F3F4F7;
+    user-select: none;
+    background-color: #3B1717;
     .loader {
-      position: relative;
-      left: 0;
       width: 100%;
       height: 100%;
-      transform: scaleY(0.001) scaleX(0);
       transform-origin: left center;
-      background-color: #2A446D;
+      background-color: $zwanzig-grad-rot;
       text-align: center;
+      color: white;
       .cookie_message {
+        display: inline-block;
+        visibility: hidden;
         user-select: none;
-        opacity: 0;
         max-width: 50%;
         position: absolute;
-        display: inline-block;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: white;
         font-size: 22px;
         font-weight: normal;
       }
       .button {
-        position: relative;
-        top: 100vh;
+        overflow: hidden;
+        position: absolute;
+        bottom: 50px;
         display: inline-block;
         color: white;
         font-size: 16px;
+        transform: translateX(-50%);
+        span {
+          display: inline-block;
+          transform: translateY(100%);
+        }
         .buttonAnimation {
           position: absolute;
           top: 0;
@@ -45,10 +50,19 @@ export default css`
           width: 100%;
           height: 100%;
           transform: scaleX(0);
-          background-color: #2A446D;
+          background-color: $zwanzig-grad-rot;
           transform-origin: left;
         }
       }
+      .cookie_disclaimer {
+        opacity: 0;
+        position: absolute;
+        font-size: 14px;
+        left: 50%;
+        bottom: 25px;
+        transform: translateX(-50%);
+      }
     }
   }
-`
+`;
+

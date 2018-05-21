@@ -1,12 +1,17 @@
 import Head from 'next/head';
-import { Fragment } from 'react';
 import style from '../styles/global/common';
 
-export default ({ title }) => (
-  <Fragment>
-    <Head>
-      <title>{`20° - ${title}`}</title>
-    </Head>
+const HTMLHead = ({ title }) => (
+  <>
     <style jsx global>{style}</style>
-  </Fragment>
+    <Head>
+      <title>{`20° ${title}`}</title>
+    </Head>
+  </>
 );
+
+HTMLHead.defaultProps = {
+  title: ''
+}
+
+export default HTMLHead;

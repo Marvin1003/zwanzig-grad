@@ -27,114 +27,174 @@ export default css`
   //-------------------------------------
 
   // MENU MOBILE
-  .menuMobile {
-    height: 100%;
+  :global(.menu) {
     width: 100vw;
-    background-color: #2A446D;
     display: flex;
-    align-items: center;
+    z-index: 50;
+  }
+
+  .menuMobile {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    padding: calc(10vw + 50px) 10vw 10vw 10vw;
+    height: 100%;
+    width: 100%;
+    .closemenu {
+      position: absolute;
+      right: 0;
+      align-self: flex-start;
+    }
+
+    .impressum {
+      position: absolute;
+      left: 10vw;
+      text-transform: lowercase;
+    }
+
     .wrapper {
-      margin: 0 25%;
+      height: 100%;
+      width: 100%;
+      max-height: 600px;
+      align-self: flex-start;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .stroke {
+        transform-origin: 0 0;
+        width: 25px;
+        border: 0;
+        border-bottom: 1px solid black;
+      }
+
       ul {
-        display: inline-flex;
+        display: flex;
         flex-direction: column;
-        :global(li) {
-          color: white;
+        :global(.mobile_menu_headline) {
+          text-transform: capitalize;
           align-self: flex-start;
+          line-height: 1;
+          color: black;
           cursor: pointer;
-          margin: 0;
           transition: color .5s ease-out;
-          &:hover {
-            color: black;
+          margin: 0 0 12.5px 0;
+          &:last-child {
+            margin: 0;
           }
-          
+          @include responsive('phone-wide', max) {
+            font-size: 26px;
+          }
           @include responsive('phone-wide', min) {
-            font-size: 40px;
+            font-size: 35px;
           }
           @include responsive('tablet', min) {
             font-size: 45px;
           }
         }
       }
-      
-      .info {
-        margin-top: 50px;
-        @include responsive('phone', min) {
-          font-size: 16px;
-        }
-        @include responsive('phone', max) {
-          font-size: 12px;
-        }
-        h3 {
-          font-size: inherit;
-          margin: 0;
-          color: white;
-          &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            margin-left: 10px;
-            background-color: white;
-            height: 2px;
-            width: 50px;
-          }
-        }
-        span {
-          font-size: inherit;
-          margin: 10px 0;
-          display: block;
-          color: #F3F4F7;
-        }
-      }
-      @media only screen and (orientation: landscape) {
-        width: 70%;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        .info_container {
+      .info_container {
+        margin-bottom: 75px;
+        .info_menu {
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
-          .info {
-            margin: 0;
+          &:first-of-type {
+            margin-bottom: 35px;
           }
-        }
-        @media only screen and (max-width: 700px) {
-          .info {
-            font-size: 14px;
+          h3 {
+            align-self: flex-start;
+            font-size: 16px;
+            margin-bottom: 20px;
           }
-          :global(li) {
-            font-size: 35px !important;
-          }
-        }
-        @media only screen and (max-width: 550px) {
-          :global(li) {
-            font-size: 30px !important;
-          }
-        }
-        @media only screen and (max-height: 350px) {
-          width: 60%;
-          .info {
+          span {
+            align-self: flex-start;
             font-size: 12px;
+            padding: 5px 0;
+            display: block;
+          }
+        }
+      }
+      @media only screen and (max-height: 650px) {
+        font-size: 22px;
+        .info_container {
+          margin-bottom: 50px;
+          .info_menu {
+            &:first-of-type {
+              margin-bottom: 20px
+            }
+            h3 {
+              font-size: 14px;
+              margin-bottom: 10px;
+            }
           }
         }
       }
     }
-  }
-  .closemenu {
-    position: absolute;
-    right: 37.5px;
-    top: 25px;
-    :global(line) {
-      stroke: white;
+    @media only screen and (max-height: 550px) and (orientation: portrait) {
+      :global(.mobile_menu_headline) {
+        font-size: 22px !important;
+      }
+      h3 {
+        font-size: 12px !important;
+      }
+      span {
+        font-size: 10px !important;
+      }
     }
-  }
-  .impressum {
-    position: absolute;
-    right: 37.5px;
-    bottom: 25px;
-    font-size: 14px;
-    color: white;
+    @media only screen and (max-height: 500px) {
+      .info_container {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+    @media only screen and (orientation: landscape) {
+      align-items: center;
+      .closemenu {
+        top: initial;
+      }
+      .impressum {
+        align-self: flex-end;
+      }
+      .wrapper {
+        height: auto;
+        flex-direction: row;
+        .stroke {
+          display: none;
+        }
+      }
+      .info_container {
+        margin: 0;
+        .info_menu {
+          margin: 0;
+        }
+      }
+      @media only screen and (max-width: 700px) {
+        .info_menu {
+          font-size: 14px;
+        }
+        :global(.mobile_menu_headline) {
+          font-size: 35px;
+        }
+      }
+      @media only screen and (max-height: 500px) {
+        ul {
+          margin-bottom: 30px;
+        }
+        :global(.mobile_menu_headline) {
+          font-size: 30px !important;
+        }
+        .info_container {
+          margin-bottom: 0 !important;
+        }
+      }
+      @media only screen and (max-height: 400px) {
+        .info_container {
+          display: none;
+        }
+        :global(.mobile_menu_headline) {
+          font-size: 20px !important;
+        }
+      }
+    }
   }
 `;

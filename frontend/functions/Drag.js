@@ -4,8 +4,10 @@ export default class DragAnimation {
     this.topics = document.querySelectorAll('a');
     this.headlines = document.querySelectorAll(headlines);
 
+    this.scrollStrength = 0.35;
     this.strength = strength;
     this.duration = duration;
+    this.width = window.innerWidth;
 
     this.coordinates = {
       startX: 0,
@@ -36,12 +38,16 @@ export default class DragAnimation {
     this.mouseUp = this.mouseUp.bind(this);
     this.changeScrollDirection = this.changeScrollDirection.bind(this);
     this.contextmenu = this.contextmenu.bind(this);
+    
     this.scrollTo = 0;
+    
     // ADD MOUSEMOVE EVENT HANDLER
     window.onmouseup = this.mouseUp;
     window.onmousedown = this.mouseDown;
     window.onwheel = this.changeScrollDirection;
     window.oncontextmenu = this.contextmenu;
+
+    TweenLite.set(document.body, { cursor: '-webkit-grab' });
   }
 
   contextmenu(e) {
@@ -57,9 +63,9 @@ export default class DragAnimation {
     else if (this.scrollTo > scrollWidth)
       this.scrollTo = scrollWidth;
     else
-      this.scrollTo = ((e.deltaY + e.deltaX) * 0.9) + this.elem.scrollLeft;
+      this.scrollTo = ((e.deltaY + e.deltaX) * this.scrollStrength) + this.elem.scrollLeft;
 
-    TweenLite.to(this.elem, 0.1, { scrollTo: { x: this.scrollTo, y: 0 }, ease: Power3.easeOut });
+    TweenLite.to(this.elem, 0.1, { scrollTo: { x: this.scrollTo, y: 0 }, ease: Power4.easeOut });
   }
 
   mouseDown(e) {
@@ -67,7 +73,7 @@ export default class DragAnimation {
     window.onmousemove = this.mouseMove;
 
     // SET CURSOR OF CONTAINER
-   this.elem.parentNode.style.cursor = '-webkit-grabbing';
+    TweenLite.set(document.body, { cursor: '-webkit-grabbing' });
 
     // CURRENT POSITION
     this.coordinates.startX = e.clientX;
@@ -85,18 +91,17 @@ export default class DragAnimation {
     window.onmousemove = null;
 
     // SET CURSOR
-   this.elem.parentNode.style.cursor = '-webkit-grab';
+    TweenLite.set(document.body, { cursor: '-webkit-grab' });
 
     // PERFORMANTER MACHEN BEI LANGEWEILE !!!
-    this.topics.forEach(item => item.parentElement.style.pointerEvents = 'auto', 0);
+    TweenLite.set(this.elem.parentNode, { clearProps: 'pointerEvents' });
 
     // ANIMATE TO
     if (this.checks.isMoving && !this.checks.interrupt) {
       this.distance = this.coordinates.endX - this.coordinates.startX;
 
       // CALCULATE POSITION TO EASE TO
-      const w = window.innerWidth;
-      this.distances.calcEase = (this.distances.difference - ((this.distance / this.strength) * (w / 200)));
+      this.distances.calcEase = (this.distances.difference - ((this.distance / this.strength) * (this.width / 1000)));
         
       // if(this.distances.calcEase > (this.elem.scrollWidth - w))
       //   this.distances.calcEase = (this.elem.scrollWidth - w);
@@ -120,13 +125,9 @@ export default class DragAnimation {
     window.onmousedown = null;
 
     // SET CURSOR
-    this.elem.parentNode.style.cursor = '-webkit-grabbing';
+    TweenLite.set(document.body, { cursor: '-webkit-grabbing' });
 
-    //  PERFORMANTER MACHEN BEI LANGEWEILE !!!
-    this.topics.forEach((item) => {
-      if (window.getComputedStyle(item.parentElement).pointerEvents !== 'none')
-        item.parentElement.style.pointerEvents = 'none';
-    });
+    TweenLite.set(this.elem.parentNode, { pointerEvents: 'none' });
 
     // CURRENT POSITION
     this.coordinates.endX = e.clientX;
@@ -139,7 +140,7 @@ export default class DragAnimation {
     else
       this.checks.interrupt = false;
 
-    this.elem.scrollLeft = this.distances.difference;
+    TweenLite.to(this.elem, 0.35, { scrollTo: { x: this.distances.difference }, ease: this.ease });
 
     this.checks.isMoving = true;
     this.coordinates.previousX = e.clientX;

@@ -25,40 +25,32 @@ export default css`
   }
 
   //-------------------------------------
+  $layoutGAP: 10vw;
 
   // IMPRESSUM
   .wrapper {
     color: rgba(0,0,0,0.5);
-    line-height: 1.75;
     hyphens: auto;
     text-align: justify;
     display: flex;
     position: relative;
-    top: 20vh;
+    top: calc(#{$layoutGAP} + 150px);
     margin: 0 auto;
-    @include responsive('phone-wide', min) {
-      width: calc(100vw - 100px);
-    }
     @include responsive('tablet-wide', max) {
       flex-direction: column;
-    }
-    @include responsive('phone-wide', max) {
-      width: calc(100vw - 75px);
     }
    
     .info {
       max-width: 250px;
       display: flex;
       flex-direction: column;
-      text-transform: uppercase;
       font-style: normal;
-      font-size: 10.5px;
-      letter-spacing: 3px;
+      font-size: 12px;
       * {
-        display: inline-block;
+        display: block;
       }
       :global(&>div, &>span){
-        margin-bottom: 10px;
+        margin-bottom: 25px;
       }
       @include responsive('tablet-wide', max) {
         margin-bottom: calc(20vh - 50px);
@@ -66,9 +58,11 @@ export default css`
     }
       
     .rechtliches {
+      line-height: 1.75;
       font-size: 10.5px;
       max-width: 600px;
       :global(h3) {
+        line-height: 1;
         font-weight: normal;
         font-size: 14px;
       }

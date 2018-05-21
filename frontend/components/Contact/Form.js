@@ -150,10 +150,10 @@ export default class extends PureComponent {
           <TextHover
             name="senden"
             duration={0.5}
-            bgColor="#F3F4F7"
+            bgColor="white"
             color="#C1C12B"
             tag="button"
-            className="submit"
+            className="submit didonesque_normal"
             style={{ opacity: 1 }}
             /> :
             // INVISIBLE NON FUNCTIONAL PLACEHOLDER

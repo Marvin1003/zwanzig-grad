@@ -1,24 +1,14 @@
-import { PureComponent } from 'react';
-import { Consumer } from '../../components/Context';
-
 import Lazy from '../../components/Utility/LazyLoading';
 
-
-class AutoSlider extends PureComponent {
+export default class AutoSlider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      domPreperation: null,
-      type: this.props.type
-    };
 
     this.durations = [
       [this.props.animationDuration, this.props.animationDuration],
       this.props.delay, 
       this.props.showDuration
     ];
-
-    // this.images = Array.from(this.props.images, () => false);
 
     this.checks = {
       checkHover: false,
@@ -147,37 +137,20 @@ class AutoSlider extends PureComponent {
   }
 
   render() {
-    if (this.props.lazy)
-      return (
-        <Lazy
-          type={1}
-          master={this.props.images}
-          imgType="parkett"
-          cookie={[]}
-          alt={[]}
-          imgTag={false}
-          style={{position: "absolute"}}
-          outerStyle={this.style.imgOuter}
-          innerStyle={this.style.imgInner}
-          group={true}
-          autoSlider={true}
-          start={this.startAutoslider}
-          class="auto_slider"
-          parallaxFix={this.props.scaleFix}
-        />
-      );
     return (
-      <div className="auto_slider">
-        {this.state.domPreperation}
-      </div>
+      <Lazy
+        master={this.props.images}
+        imgType="parkett"
+        imgTag={false}
+        style={{position: "absolute"}}
+        outerStyle={this.style.imgOuter}
+        innerStyle={this.style.imgInner}
+        group={true}
+        autoSlider={true}
+        start={this.startAutoslider}
+        className="auto_slider"
+        parallaxFix={this.props.scaleFix}
+      />
     );
   }
 }
-
-export default (props) => (
-  <Consumer>
-    {(context) => (
-      <AutoSlider {...props} mime={context.mime} />
-    )}
-  </Consumer>
-);

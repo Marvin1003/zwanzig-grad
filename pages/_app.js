@@ -1,13 +1,20 @@
 import App, { Container } from 'next/app';
 
-import Provider from '../frontend/components/Context';
+// PROVIDER
+import { WebPProvider } from '../frontend/components/Context/WebP';
+import { RouterProvider } from '../frontend/components/Context/Router';
 
-import registerSW from '../frontend/functions/registerSW';
+import Loader from '../frontend/components/Loader/PageLoader';
+
+import '../frontend/gsap/imports';
 
 export default class MyApp extends App {
-
+  constructor(props) {
+    super(props);
+    this.state = { showLoader: true };
+  }
   componentDidMount() {
-    registerSW();
+    require('intersection-observer');
     
     const pageTransitionWrapper = document.createElement('div');
     const pageTransition = document.createElement('div');
@@ -19,14 +26,27 @@ export default class MyApp extends App {
     document.body.appendChild(pageTransitionWrapper);
   }
 
+  removeLoader = () => {
+    // REMOVE LOADER
+    this.setState({ showLoader: false });
+  }
+
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <Provider>
-        <Container>
-          <Component {...pageProps} />
-        </Container>    
-      </Provider>
+      <RouterProvider>
+        <WebPProvider>
+          <Container>
+            {this.state.showLoader 
+            ? <Loader 
+                removeMe={this.removeLoader} 
+              />
+            : null
+            }
+              <Component {...pageProps} loader={this.state.showLoader} />
+          </Container>    
+       </WebPProvider>
+      </RouterProvider>
     );
   }
 }

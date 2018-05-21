@@ -1,36 +1,31 @@
-import toSpan from '../functions/helper/toSpan';
-let timeout; 
-let timeline;
+let timeline, timeout, tween;
 
-export default function(headlineArr, subtextArr, colorArr, direction, initial) {
+export default function(headlineArr, colorArr, direction, initial) {
+  if(location.pathname !== '/')
+    return; 
+    
   const headlineDuration = 0.5;
-  const subtextDuration = 0.5;
 
   const headline = document.getElementsByClassName('topic')[0];
-  const subtext = document.getElementsByClassName('topic_subtext')[0];
 
-  const target = document.querySelectorAll('.home_container > section');
+  const target = document.querySelectorAll('.section_background_wrapper');
 
-  const nextButton = document.querySelector('.next circle');
-  const prevButton = document.querySelector('.prev circle');
-  
-  let buttonHover = null;
-  
+  // const color = colorArr[window.APP.nextSection];
+
+  const nextButton = document.querySelector('.next');
+  const prevButton = document.querySelector('.prev');
+  const nextCircle = nextButton.querySelector('circle');
+  const prevCircle = prevButton.querySelector('circle');
+
   const diashowInterval = 15000;
   const tl = new TimelineLite();
   
-  const color = colorArr[window.APP.nextSection];
+  let reverseHover = false;
+  let active = false;
 
-  let mouseMove = false;
-
-  try {
-    desktopDiashowManager();
-  } catch(e) { console.log(e) }
-
-  // CLEAR PREVIOUS TIMEOUT
-  clearTimeout(timeout);
+  let reverse = true;
   
-  if(!window.APP.autoScrolling && location.pathname === '/') {
+  if(!window.APP.autoScrolling) {
     window.APP.autoScrolling = true;
 
     // UPDATE WINDOW.APP.NEXTSECTION
@@ -38,23 +33,23 @@ export default function(headlineArr, subtextArr, colorArr, direction, initial) {
 
     // UPDATE CURRENTLINK
     this.updateCurrentLink();
+
+    TweenLite.set(target[window.APP.nextSection], { visibility: 'visible' });
   
     if(!initial) {
+      try {
+        timeline.kill();
+      } catch(e) { }
 
-      const progress = direction === 'down' ? 1 : 0;
       // SPEED UP TIMELINE
-      tl.to(timeline, 0.5, { progress, ease: 'zwanzig-grad', onComplete: () => {
-        if(direction === 'down') {
-          TweenLite.fromTo(nextButton, 0.5, 
-            { strokeDashoffset: 0 }, { strokeDashoffset: -232.478, ease: 'zwanzig-grad' });
-        }
-      }});
-
-      timeline.pause();
+      const strokeDashoffset = direction === 'down' ? 0 : 301.593;
+      const tl2 = new TimelineLite();
+      tl2.to(nextCircle, 0.5, { strokeDashoffset, ease: 'zwanzig-grad' })
+         .to(nextCircle, 0.5, { alpha: 0, ease: Power4.easeOut });
+      TweenLite.to(prevCircle, 0.5, { strokeDashoffset: 301.593 });
 
       if(direction === 'down') {   
         setZindex(2, 1);
-          
         TweenLite.to(target[window.APP.prevSection], 1, { xPercent: -50, ease: 'zwanzig-grad' });
         TweenLite.fromTo(target[window.APP.nextSection], 1, { xPercent: 100 }, {
           xPercent: 0,
@@ -70,92 +65,63 @@ export default function(headlineArr, subtextArr, colorArr, direction, initial) {
         });
       }
     } else {
+      try {
+        desktopDiashowManager();
+      } catch(e) { }
       TweenLite.set(target[window.APP.nextSection], { xPercent: 0, zIndex: 2, ease: 'zwanzig-grad' });
     }
  
     !initial && updateSecIndicator.call(this);
     
     const y = (direction === 'down') ? -75 : 75;
-    const yPercent = (direction === 'down') ? -100 : 100;
+    // 110 instead of 100 as line-height is partially to low causing a visual bug where some part of the characters are still visible 
+    const yPercent = (direction === 'down') ? -110 : 110;
 
-    const delay = 0.05;
-    
     if(window.innerWidth > 1025) 
       var callback = window.APP.updateImages;
     
     if(!initial) {
       var headlineTL = new TimelineLite();
-      var subtextTL = new TimelineLite();
       const headlineTL2 = new TimelineLite({ onComplete: handleComplete, paused: true });
 
       headlineTL
-        .fromTo('.topic_chars:nth-of-type(even)', headlineDuration, 
+        .fromTo(headline, headlineDuration, 
           { yPercent: 0 }, 
           { yPercent , ease: 'zwanzig-grad' })
-        .fromTo('.topic_chars:nth-of-type(odd)', headlineDuration, 
-          { yPercent: 0 }, 
-          { yPercent, ease: 'zwanzig-grad' }, delay)
         .set(headline, { text: headlineArr[window.APP.nextSection], onComplete: () => {
-          toSpan(headline, 'topic_chars');
           headlineTL2.play();
 
-          headlineTL2.fromTo('.topic_chars:nth-of-type(odd)', headlineDuration, 
+          headlineTL2.fromTo(headline, headlineDuration, 
             { yPercent: -yPercent }, 
             { yPercent: 0, ease: 'zwanzig-grad' });
-          headlineTL2.fromTo('.topic_chars:nth-of-type(even)', headlineDuration, 
-            { yPercent: -yPercent }, 
-            { yPercent: 0, ease: 'zwanzig-grad' }, delay);
         }
       })
-          
-      subtextTL
-        .set(subtext, { alpha: 1 })
-        .to(subtext, subtextDuration, { alpha: 0, ease: 'zwanzig-grad' })
-        .set(subtext, { alpha: 0, text: subtextArr[window.APP.nextSection] })
-        .to(subtext, subtextDuration, { alpha: 1, ease: 'zwanzig-grad' });
 
     } else {
       var headlineTL = new TimelineLite({ onComplete: handleComplete });
-      var subtextTL = new TimelineLite();
 
       headlineTL
-        .set(headline, { text: headlineArr[window.APP.nextSection], onComplete: () => toSpan(headline, 'topic_chars') })
-        .fromTo('.topic_chars:nth-of-type(odd)', headlineDuration + 0.5, 
-          { yPercent }, { yPercent: 0, ease: 'zwanzig-grad' })
-        .fromTo('.topic_chars:nth-of-type(even)', headlineDuration + 0.5, 
-          { yPercent }, {yPercent: 0, ease: 'zwanzig-grad' }, delay);
-
-
-      subtextTL
-        .set(subtext, { text: subtextArr[window.APP.nextSection] })
-        .fromTo(subtext, subtextDuration, 
-          { alpha: 0, y }, { alpha: 1, y: 0, ease: 'zwanzig-grad' });
+        .set(headline, { text: headlineArr[window.APP.nextSection] })
+        .fromTo(headline, headlineDuration + 0.5, 
+          { yPercent }, { yPercent: 0, ease: 'zwanzig-grad' });
     }
-
-    // SET PROPER COLOR
-    // if(initial) {
-    //   TweenLite.set('.layout', { color });
-    //   TweenLite.set('.header_home', { color });
-    // } else if(colorArr[window.prevSection] !== colorArr[window.nextSection]) {
-    //   TweenLite.to('.layout', 0.5, { color });
-    //   TweenLite.to('.header_home', 0.5, { color });
-    // }
   } 
 
   function handleComplete() {
     window.APP.autoScrolling = false;
     window.APP.prevSection = window.APP.nextSection;
-
+    
     callback && callback(window.APP.nextSection);
 
-    if(window.innerWidth < 1025 || !mouseMove)
-      timeout = setTimeout(() => window.APP.nextTopic('down', false), diashowInterval);
-
-    timeline = new TimelineLite();
+    try {
+      timeline.kill();
+    } catch(e) { }
+    timeline = new TimelineLite({ onComplete: () =>{ window.APP.nextTopic('down', false) } 
+      });
     timeline
-      .set(nextButton, { alpha: 1 })
-      .fromTo(nextButton, diashowInterval / 1000, 
-        { strokeDasharray: 232.478, strokeDashoffset: 232.478 },
+      .set(nextCircle, { alpha: 1 })
+      .fromTo(nextCircle, diashowInterval / 1000, 
+        { strokeDasharray: 301.593, strokeDashoffset: 301.593 },
         { strokeDashoffset: 0, ease: Power0.easeNone });
   }
 
@@ -196,11 +162,13 @@ export default function(headlineArr, subtextArr, colorArr, direction, initial) {
       ]
     }
   }
+
   function desktopDiashowManager() {
-    nextButton.parentNode.addEventListener("mouseenter", buttonHoverActive);
-    nextButton.parentNode.addEventListener("mouseleave", buttonHoverNotActive);
-    prevButton.parentNode.addEventListener("mouseenter", buttonHoverActive);
-    prevButton.parentNode.addEventListener("mouseleave", buttonHoverNotActive);
+    nextButton.addEventListener("mouseenter", buttonHoverActive);
+    nextButton.addEventListener("mouseleave", buttonHoverNotActive);
+    prevButton.addEventListener("mouseenter", buttonHoverActive);
+    prevButton.addEventListener("mouseleave", buttonHoverNotActive);
+
     // DONT MAKE THE INNERWIDTH CHECK HERE - CHECKING INSIDE THE EVENT WORKS ON RESIZE
     window.addEventListener("mousemove", stopDiashow);
     // DOESNT WORK IN OPERA - MIGHT ADD SUPPORT DETECTION AND FOCUS AND BLUR EVENT FALLBACK
@@ -209,55 +177,77 @@ export default function(headlineArr, subtextArr, colorArr, direction, initial) {
     window.addEventListener('mousedown', stopDiashow);
   }
 
-  function buttonHoverActive() {
-    buttonHover = true;
+  function animateButtons(type, target) {
+    if(!window.APP.autoScrolling && !window.APP.touch) {
+      timeline.pause();
+      if(type === 'play') {
+        reverseHover = false;
+        if(target === nextCircle) {
+          active = false;
+          reverse = false
+        } else
+          reverse = true;
+
+        tween = TweenLite.fromTo(target , 1, { alpha: 1 }, { strokeDashoffset: 0, ease: 'zwanzig-grad' });
+      }
+      else if(type === 'reverse') {
+        reverseHover = true;
+        if(!reverse)
+          stopDiashow();
+        if(reverse) {
+          tween = TweenLite.to(target , 1, 
+            { strokeDashoffset: 301.593, ease: 'zwanzig-grad', onComplete: continueDiashow });
+          }
+      }
+    }
+  }
+
+  function buttonHoverActive(e) {
+    animateButtons('play', e.target.querySelector('circle'));
     stopDiashow(undefined, false, true);
   }
-  function buttonHoverNotActive() {
-    buttonHover = false;
+  function buttonHoverNotActive(e) {
+    animateButtons('reverse', e.target.querySelector('circle'));
   }
 
   function handleVisibilityChange() {
-    document.hidden && stopDiashow(undefined, true)
+    document.hidden && stopDiashow()
   }
 
-  function stopDiashow(e, hidden, hover) {
+  function stopDiashow(e, hidden) {
     if(location.pathname !== '/') {
       // REMOVE UNNECESSARY EVENT LISTENER
       nextButton.parentNode.removeEventListener("mouseenter", buttonHoverActive);
       nextButton.parentNode.removeEventListener("mouseleave", buttonHoverNotActive);
       prevButton.parentNode.removeEventListener("mouseenter", buttonHoverActive);
       prevButton.parentNode.removeEventListener("mouseleave", buttonHoverNotActive);
-      window.removeEventListener("mousemove", stopDiashow);
       window.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('mousedown', stopDiashow);
+      window.removeEventListener("mousemove", stopDiashow);
       return;
     }
 
-    if(window.innerWidth > 1024 || hidden || hover) { 
-      clearTimeout(timeout);
-      mouseMove = true;
-    }
-
     try {
-      if(timeline.isActive() || buttonHover === false ) {
-        buttonHover = null;
-        timeline.pause();
-        tl.to(timeline, 1, { progress: 0, ease: 'zwanzig-grad', onComplete: continueDiashow });
-      } else if(hidden) {
-        tl.set(timeline, { progress: 0 });
-        continueDiashow();
-      } 
-    } catch(e) { console.log(e) }
-  }
-
+      if((timeline.isActive() || reverseHover) && !active) {
+        active = true;
+        try {
+          reverseHover && tween.pause();
+        } catch(e) { }
+        try {
+          timeline.pause();
+        } catch(e) { }
+        TweenLite.to(nextCircle, 1, { strokeDashoffset: 301.593, ease: 'zwanzig-grad', onComplete: continueDiashow });
+      }
+    } catch(e) { }
+  } 
+    
+    
   function continueDiashow(e) {
-    if(!buttonHover && !timeline.isActive()) {
+    if(!window.APP.autoScrolling && active) {
+      reverseHover = false;
+      active = false;
+      timeline.kill();
       timeline.restart();
-      
-      clearTimeout(timeout);
-      mouseMove = false;
-      timeout = setTimeout(() => window.APP.nextTopic('down', false), diashowInterval);
     }
   }
 

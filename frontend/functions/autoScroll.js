@@ -5,6 +5,7 @@ export default function autoScroller() {
   let nextTouch = 0;
   let direction;
   let activeTouch;
+  const minSwipe = 30;
   const wheelData = [];
 
   window.addEventListener('wheel', preventScrolling, { capture: true });
@@ -13,7 +14,6 @@ export default function autoScroller() {
   window.addEventListener('touchmove', toggleActiveTouch, { passive: false });
   window.addEventListener('touchend', autoScroll, { passive: true });
   window.addEventListener('keyup', handleArrowNavigation);
-  
 
   buttons();
   initiateAnimation(true);
@@ -62,24 +62,26 @@ export default function autoScroller() {
           break;
   
         case 'touchend':
-          const yDiff = Math.abs(nextTouch.pageY - prevTouch.pageY);
           const xDiff = Math.abs(nextTouch.pageX - prevTouch.pageX);
-          
-          if(yDiff > xDiff) {
-            if (nextTouch.pageY > prevTouch.pageY)
-              direction = 'up';
-            else if (nextTouch.pageY < prevTouch.pageY)
-              direction = 'down';
-          }
-          if(yDiff < xDiff) {
-            if (nextTouch.pageX > prevTouch.pageX)
-              direction = 'up';
-            else if (nextTouch.pageX < prevTouch.pageX)
-              direction = 'down';
-          }
+          const yDiff = Math.abs(nextTouch.pageY - prevTouch.pageY);
 
-          if(activeTouch)
-            initiateAnimation(false, direction);
+          if(xDiff > minSwipe || yDiff > minSwipe) {
+            if(yDiff > xDiff) {
+              if (nextTouch.pageY > prevTouch.pageY)
+                direction = 'up';
+              else if (nextTouch.pageY < prevTouch.pageY)
+                direction = 'down';
+            }
+            if(xDiff > yDiff) {
+              if (nextTouch.pageX > prevTouch.pageX)
+                direction = 'up';
+              else if (nextTouch.pageX < prevTouch.pageX)
+                direction = 'down';
+            }
+
+            if(activeTouch)
+              initiateAnimation(false, direction);
+          }
 
           activeTouch = false;
           break;
@@ -99,7 +101,7 @@ export default function autoScroller() {
 
   function initiateAnimation(initiate = false, direction) {
     try {
-      window.APP.nextTopic(direction, initiate,);
+      window.APP.nextTopic(direction, initiate);
     } catch(e) { }
   }
 

@@ -1,35 +1,30 @@
-import { PureComponent } from 'react';
+import { PureComponent } from 'react';
 
-import { Consumer } from '../Context';
+import { WebPContext } from '../Context/WebP';
 
-import inViewPort from '../../functions/helper/inViewPort';
 import cookieChecker from '../../functions/helper/cookieChecker';
 import runOnce from '../../functions/helper/runOnce';
 
-// IMPORTANT --- IMPLEMENT INTERSECTION OBSERVER IF SUPPORTED / WAY MORE PERFORMANT
 class LazyLoading extends PureComponent {
   constructor(props) {
     super(props);
-    
+
     // REFS
     this.image = React.createRef();
-    this.loading = React.createRef();
     this.container = React.createRef();
-
-    this.handleComplete = this.handleComplete.bind(this);
 
     // STYLE
     this.style = {
       height: '100%',
-      width: 0,
-      display: 'none',
+      width: '100%',
+      visibility: 'hidden',
     };
 
     this.parentFunctionOnce = runOnce(this.props.start);
   }
 
   static defaultProps = {
-    class: '',
+    className: '',
     outerStyle: {},
     innerStyle: {},
     parallaxFix: '',
@@ -38,156 +33,91 @@ class LazyLoading extends PureComponent {
   }
 
   componentDidMount() {
-    this.initiateCheckCookies();
+    if(this.props.mime) {
+      this.prepare();
+    }
   }
-
   componentDidUpdate() {
-    // RESET 
-    this.parentFunctionOnce = runOnce(this.props.start);
-    
-    this.initiateCheckCookies();
-  }
-
-  componentWillUnmount() {
-    this.eventListener("remove")
-  }
-
-  initiateCheckCookies() {
-    (this.props.mime && this.props.acceptedCookies) && this.checkCookies();
-  }
-
-  checkCookies = () => {
+    if(this.props.mime) {
+      this.prepare();
+    }
     if(this.props.group) {
-      this.groupImages = this.container.current.querySelectorAll('.lazy_image');
-      cookieChecker.call(this, this.groupImages, true);
-    } else 
-      cookieChecker.call(this, this.image.current);
-  }
-
-  initiate(cached, image) {
-    if(this.props.group) {
-      let cookies = [];
-      let src = [];
-      this.props.master.forEach((img, i) => {
-        this.master = `../static/images/${this.props.imgType}/${img}${this.props.mime}`;
-        src.push(this.master);
-        cookies.push(this.props.imgType + img);
-      })
-      this.showImage(cached, image, cookies, src);
-    } else {
-      this.master = `../static/images/${this.props.imgType}/${this.props.master}${this.props.mime}`;
-      this.showImage(cached, image, this.props.cookie);
+      this.parentFunctionOnce = runOnce(this.props.start);
     }
   }
 
-  applySource(image, src, cached) {
-    TweenLite.set(image, { display: 'initial' });
+  prepare = () => {
+    if(this.props.group) {
+      this.groupImages = [...this.container.current.querySelectorAll('.lazy_image')];
+      this.initiate(this.groupImages);
+    } else {
+      this.initiate(this.image.current);
+    }
+  }
+  
+  createObserver(target) {
+    // THERE SEEMS TO BE AN ISSUE AS SOME PICTURES ARE PLACED OUTSITE OF THE VIEWPORT ON THE X AXIS (EVEN THO THEY ARE VISUALLY PLACED INSIDE OF IT - THIS IS THE MAGIC OF THE PERSPECTIVE AND TRANSFORM). BUT THIS PROBLEM RESULTS IN THE ELEMENT NEVER BEING TREATED AS IN THE VIEWPORT - SO isInterescting WILL REMAIN FALSE 
+
+    const options = {
+      rootMargin: '10px 0px 10px 0px',
+      threshold: 0
+    }
     
+    this.observer = new IntersectionObserver(this.callback, options);
+    this.observer.observe(target);
+  }
+
+  callback = (target) => {
+    // U CAN ALSO ITERATE OF THE OBSERVER ENTRIES BUT I DONT SEE THE NEED HERE AS ITS ALWAYS JUST ONE TARGET - THE OUTER LAZY LOADING CONTAINER 
+    if(target[0].isIntersecting) {
+      this.lazyLoading(target[0].target);
+      this.observer.unobserve(target[0].target);
+    }
+  }
+
+  initiate(image) {
+    this.src = [];
+
+    this.props.group
+      ? this.props.master.forEach((img, i) => this.createData(img))
+      : this.createData(this.props.master);
+
+    this.showImage(image);
+  }
+
+  createData(image) {
+    const master = `../static/images/${this.props.imgType}/${image}${this.props.mime}`;
+    this.src.push(master);
+  }
+
+  showImage(image) {
+    this.images = this.props.group ? this.groupImages : [this.image.current];
+    this.createObserver(this.container.current);
+  }
+
+  applySource(image, src) {
+    TweenLite.set(image, { visibility: 'visible' });
     if(this.props.imgTag) 
-      image.src = src;
+      TweenLite.set(image, { src });
     else 
       TweenLite.set(image, { backgroundImage: `url(${src})`});
 
-      if(!cached && this.props.animate) {
-        TweenLite.to(image, 0.75, 
-          { width: '100%', ease: 'zwanzig-grad', onComplete: this.handleComplete });
-      }
+    TweenLite.set(this.container.current, { background: 'none' });
+  }
 
-    else if(!this.props.autoSlider)
+  lazyLoading(src, cookie) {
+    // LOAD MASTER IMAGE
+    this.images.forEach((image, i) => {
+      const highRes = new Image();
+      highRes.src = this.src[i];
+      highRes.onload = () => ( this.applySource(image, this.src[i]) );
+    })
+    if(this.props.group)
       this.handleComplete();
-    else if(cached && this.props.autoSlider)
-      this.loading.current.remove();
   }
 
-  handleComplete(cached) {
-    if(!this.props.autoSlider && this.loading.current)
-      this.loading.current.remove();
-    else {
-      this.timeout = setTimeout(() => {
-        try {
-          this.loading.current.remove();
-          this.container.current.classList.remove('lazy_container');
-        } catch(e) { console.log(e) }
-      }, 2000);
-    }
-    // NOT CLEAN
-    if(this.props.group) 
-      this.parentFunctionOnce(this.groupImages);
-  }
-
-  showImage(cached, image, cookie, src) {
-    if(cached) {
-      TweenLite.set(image, { width: '100%' });
-      this.container.current.classList.remove('lazy_container');
-      if(this.props.group) {
-        image.forEach((image, i) => this.applySource(image, src[i], cached));
-        this.eventListener('add', this.container.current, cookie, src, cached);
-      } else 
-        this.applySource(image, this.master, cached);
-    } else {
-      this.loading.current.classList.add('lazy');
-      this.loading.current.innerText = 'Loading';
-
-      if(this.props.autoSlider) 
-        this.eventListener('add', this.container.current, cookie, src, cached);
-      else if(!this.props.group) 
-        this.eventListener('add', image, cookie, this.master, cached);
-      else 
-        this.lazyLoading(this.container.current, cookie, src, cached);
-    }
-  }
-
-  eventListener(type, i, c, s, bool) {
-    
-    const parallax = document.getElementsByClassName('parallax')[0];
-
-    switch (type) {
-      case 'add': 
-        this.lazy = this.lazyLoading.bind(this, i, c, s, bool);
-        document.body.addEventListener('scroll', this.lazy, { passive: true });
-        if(parallax)
-          parallax.addEventListener('scroll', this.lazy, { passive: true });
-        this.lazy();
-        break;
-      case 'remove':
-        clearTimeout(this.timeout);
-        document.body.removeEventListener('scroll', this.lazy, { passive: true });
-        if(parallax)
-          parallax.removeEventListener('scroll', this.lazy, { passive: true });
-        break;
-      default: 
-        console.log('Invalid Type')
-    }
-  }
-
-  lazyLoading(image, cookie, src, cached) {
-    // CHECK IF IMAGE IS VISIBLE
-    const visible = inViewPort.call(this, this.container.current);
-
-    if (visible || this.props.type === 3) {
-      this.eventListener('remove');
-      // LOAD MASTER IMAGE
-      if(!cached) {
-        if(this.props.group) {
-          src.forEach( async (s, i) => {
-            const highRes = new Image();
-            highRes.src = s;
-            document.cookie = `${cookie[i]}=true`;
-            highRes.onload = () => (
-              this.applySource(image.childNodes[i].childNodes[0], s, cached)
-            );
-          })
-        } else {
-          const highRes = new Image();
-          highRes.src = src;
-          highRes.onload = () => (
-            this.applySource(image, src, cached)
-          );
-          document.cookie = `${cookie}=true`;
-        }
-      } else if(this.props.autoSlider)
-        this.handleComplete();
-    }
+  handleComplete = () => {
+    this.parentFunctionOnce(this.groupImages);
   }
 
   render() {
@@ -198,9 +128,8 @@ class LazyLoading extends PureComponent {
           data-name="lazy" 
           ref={this.container} 
           style={this.props.style} 
-          className={`lazy_container background_center ${this.props.class}`}
+          className={`lazy_container background_center ${this.props.className}`}
         >
-          <span ref={this.loading} className={this.props.parallaxFix}></span>
           {
             this.props.master.map((image, i) => (
               <div style={this.props.outerStyle} key={`${this.props.imgType}${i + 1}`} >
@@ -215,16 +144,14 @@ class LazyLoading extends PureComponent {
         </div>
       );
     }
-
     return (
       <div 
         data-name="lazy" 
         ref={this.container} 
         style={this.props.style} 
-        className={`lazy_container ${this.props.class}`}
+        className={`lazy_container ${this.props.className}`}
       >
-        <span ref={this.loading}></span>
-        <Tag data-name={this.props.cookie}
+        <Tag data-name={this.props.imgType + this.props.master}
           ref={this.image} 
           alt={this.props.alt} 
           className="lazy_image background_center" 
@@ -236,8 +163,8 @@ class LazyLoading extends PureComponent {
 }
 
 export default (props) => (
-  <Consumer>
-    {({acceptedCookies, mime}) => <LazyLoading {...props} acceptedCookies={acceptedCookies} mime={mime} /> }
-  </Consumer>
+  <WebPContext.Consumer>
+    {(mime) => <LazyLoading {...props} {...mime} /> }
+  </WebPContext.Consumer>
 );
 

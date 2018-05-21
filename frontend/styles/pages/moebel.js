@@ -65,6 +65,9 @@ export default css`
 
   //-------------------------------------
 
+  $zwanzig-grad-rot: #6D2A2A;
+  $layoutGAP: 10vw;
+  
   // SECTION TWO
   .sec_two_moebel {
     @include responsive("tablet-wide", min){
@@ -76,7 +79,7 @@ export default css`
       }
       @include responsive("tablet-wide", min){
         position: absolute;
-        left: 14.010989011%;
+        left: 15%;
         bottom: 80vh;
       }
     }
@@ -85,11 +88,11 @@ export default css`
         @include parallax(-1);
         @include calcDistance(bottom, 0vh, -1);
         @include calcDistance(left, 70% , -1);
-        margin-left: 50px;
+        @include calcMarginPadding(0, margin, 0px, 0px, 0px, $layoutGAP); 
         position: absolute;
         width: 30%;
-        height: 22.685185185185185vh;
-        background-color: #C1C12B;
+        height: 20vh;
+        background-color: $zwanzig-grad-rot;
       }
     }
     :global([data-name="lazy"]) {
@@ -98,14 +101,14 @@ export default css`
         @include parallax(-2);
         @include calcDistance(bottom, 0vh, -2);
         @include calcDistance(left, 50%, -2);
-        @include calcMarginPadding(-1, margin, 0px,0px,0px, 50px);
+        @include calcMarginPadding(-1, margin, 0px, 0px, 0px, $layoutGAP);        
         position: absolute;
         width: 40%;
         height: 41.666666666666667vh;
       }
       @include responsive("tablet-wide", max){
-        height: 75vh;
-        margin-top: 50px;
+        height: 30vh;
+        margin-top: 100px;
         width: 100%;
         div{
           position: relative;
@@ -123,7 +126,8 @@ export default css`
     .sec_three_headline {
       @include responsive("tablet-wide", min){
         @include parallax(-2, -180deg);
-        @include calcDistance(left, 50px, -2);
+        @include calcDistance(left, 50px, 0);    
+        @include calcMarginPadding(-1, margin, 0px, 0px, 0px, $layoutGAP);         
         bottom: -50vh;
       }
       @include responsive("tablet-wide", max){
@@ -133,15 +137,16 @@ export default css`
     .sec_three_text {
       @include responsive("tablet-wide", min){
         bottom: 15vh;
-        right: 14.010989011%;
+        right: 22.25%;
+        transform: translateX(50%);
         position: absolute;
       }
     }
     :global([data-name="lazy"]) {
       @include responsive("tablet-wide", min){
         @include parallax(-1);
-        @include calcDistance(left, 12.0054945055%, -1);
-        margin-left: 50px;
+        @include calcDistance(left, 15%, -1);
+        @include calcMarginPadding(0, margin, 0px, 0px, 0px, $layoutGAP);                 
         position: absolute;
         bottom: 3vh;
         width: 40%;
@@ -181,8 +186,8 @@ export default css`
       @include responsive("tablet-wide", min){
         @include parallax(-2);
         @include calcDistance(bottom, 0vh , -2);
-        @include calcDistance(left, 10% , -2);
-        @include calcMarginPadding(-1, margin, 0px, 0px, 0px, 50px);
+        @include calcDistance(left, 15% , -2);
+        @include calcMarginPadding(-1, margin, 0px, 0px, 0px, $layoutGAP);                 
       }
      
     }
@@ -191,7 +196,7 @@ export default css`
         @include parallax(-1);
         @include calcDistance(left, 35% , -1);
         @include calcDistance(bottom, calc(-25vh + 37.5px), -1);
-        margin-left: 50px;
+        @include calcMarginPadding(0, margin, 0px, 0px, 0px, $layoutGAP);         
       }
       @include responsive("tablet-wide", max) {
         left: 20%;
@@ -201,9 +206,9 @@ export default css`
     :global([data-name="lazy"]):nth-of-type(3) {
       @include responsive("tablet-wide", min){
         @include parallax(-0.5);
-        @include calcDistance(left, 60%, -0.5);
+        @include calcDistance(left, 55%, -0.5);
         @include calcDistance(bottom, calc(-50vh + 75px), -0.5);
-        @include calcMarginPadding(0.5, margin, 0px, 0px, 0px, 50px);
+        @include calcMarginPadding(0.5, margin, 0px, 0px, 0px, $layoutGAP);         
       }
       @include responsive("tablet-wide", max) {
         left: 40%;
