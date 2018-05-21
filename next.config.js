@@ -1,13 +1,8 @@
 const path = require('path');
 const withOffline = require('next-offline');
 const withManifest = require('next-manifest');
-// const getRoutes = require('./routes');
 const withBundleAnalyzer = require('@zeit/next-bundle-analyzer');
 
-// exportPathMap: getRoutes,
-// useFileSystemPublicRoutes: false,
-
-  
 module.exports = withBundleAnalyzer(withManifest(withOffline({
   analyzeServer: ["server", "both"].includes(process.env.BUNDLE_ANALYZE),
   analyzeBrowser: ["browser", "both"].includes(process.env.BUNDLE_ANALYZE),
