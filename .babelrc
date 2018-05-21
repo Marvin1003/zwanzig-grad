@@ -1,0 +1,16 @@
+{
+  "presets": [
+    "next/babel"
+  ],
+  "plugins": [
+    [
+      "styled-jsx/babel",
+      {
+        "optimizeForSpeed": false,
+        "plugins": [
+          "styled-jsx-plugin-sass"
+        ]
+      }
+    ]
+  ]
+}
