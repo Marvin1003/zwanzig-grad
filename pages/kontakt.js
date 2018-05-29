@@ -12,7 +12,7 @@ export default () => (
       <div className="wrapper">
         <div className="futura_normal layout_wrapper">
           <Form />
-          <address className="address">
+          <address className="address font_small">
             <span>zwanzig-grad / </span>
             <span>wertherstr. 310 / </span>
             <span>33619 bielefeld / </span>

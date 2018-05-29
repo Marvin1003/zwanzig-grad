@@ -10,6 +10,7 @@ export default () => (
     <style jsx>{style}</style>
     <section className="section sec_two_innenausbau">
       <Lazy
+        lazy={false}
         master={1}
         imgType="parkett"
         alt="parkett1"
@@ -30,6 +31,7 @@ export default () => (
     </section>
     <section className="section sec_three_innenausbau">
       <Lazy
+        lazy={false}
         master={2}
         imgType="parkett"
         alt="parkett2"
@@ -51,6 +53,7 @@ export default () => (
     <section className="section sec_four_innenausbau">
       <h1 className="quattrocento_headline sec_four_headline">Kreativ</h1>
       <Lazy
+        lazy={false}
         master={3}
         imgType="parkett"
         alt="parkett3"

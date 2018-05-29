@@ -10,12 +10,14 @@ export default () => (
     <style jsx>{style}</style>
     <section className="section sec_two_treppe">
       <Lazy
+        lazy={false}
         master={1}
         imgType="parkett"
         alt="parkett1"
         imgTag={true}
       />
       <Lazy
+        lazy={false}
         master={2}
         imgType="parkett"
         alt="parkett2"
@@ -29,6 +31,7 @@ export default () => (
         <p className="normal_text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </div>
       <Lazy
+        lazy={false}
         master={1}
         imgType="parkett"
         alt="parkett1"
@@ -37,12 +40,14 @@ export default () => (
     </section>
     <section className="sec_four_treppe">
       <Lazy
+        lazy={false}
         master={1}
         imgType="parkett"
         alt="parkett1"
         imgTag={true}
       />
       <Lazy
+        lazy={false}
         master={2}
         imgType="parkett"
         alt="parkett2"
@@ -53,6 +58,7 @@ export default () => (
       <h1 className="quattrocento_headline sec_five_headline">Qualität</h1>
       <div className="sec_five_box" />
       <Lazy
+        lazy={false}
         master={4}
         imgType="parkett"
         alt="parkett4"

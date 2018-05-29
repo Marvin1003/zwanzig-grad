@@ -9,10 +9,11 @@ import Loader from '../frontend/components/Loader/PageLoader';
 import '../frontend/gsap/imports';
 
 export default class MyApp extends App {
-  state = { showLoader: true };
-
+  constructor(props) {
+    super(props);
+    this.state = { showLoader: true };
+  }
   componentDidMount() {
-    // POLYFILL FOR INTERSECTION - OBSERVER
     require('intersection-observer');
     
     const pageTransitionWrapper = document.createElement('div');

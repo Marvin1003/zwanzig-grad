@@ -39,24 +39,6 @@ const styles = `
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
   }
-
-    // DISPLAY TO SMALL 
-  @media only screen and (max-width: 300px) {
-    html::after {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 0 10px;
-      font-family: "didonesque-roman", serif;
-      text-align: center;
-      content: 'To visit this Website you need a larger display.'
-    }
-    // CAUSES BUG !! -- REMINDER -- / BUTTON HOVER / AUTOSLIDER
-    body {
-      display: none;
-    }
-  }
   .button {
     border: 0;
     background-color: transparent;

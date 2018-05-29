@@ -189,7 +189,7 @@ class Home extends PureComponent {
         <style jsx>{style}</style>
         <div className="layout futura_normal">
           <div className="topic_container"><h1 className="topic quattrocento_normal" /></div>
-          <div className="current_section side">
+          <div className="current_section side font_medium">
             <span ref={this.current} className="sec_current" />
             /
             <span ref={this.amount} className="sec_amount" />
@@ -199,8 +199,8 @@ class Home extends PureComponent {
             <SVGCircle hover={true} className="next svg_hover pointer" />
           </div>
           {/* <Link className="left links" href="">werte</Link> */}
-          <a className="left links pointer">werte</a>
-          <Link className="right links pointer" href="kontakt">kontakt</Link>
+          <a className="left links pointer font_medium">werte</a>
+          <Link className="right links pointer font_medium" href="kontakt">kontakt</Link>
         </div>
         <div className="home_container">
           <Background content={this.headlines} mime={this.props.mime} />
