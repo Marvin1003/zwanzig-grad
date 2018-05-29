@@ -76,9 +76,14 @@ export class RouterProvider extends React.Component {
       this.setState((prevState) => ({ menu: !prevState.menu }));
 
       // DISABLE TOUCH IF MENU IS OPEN AND MOBILE DEVICE
-      window.APP.menu && this.state.device === 'mobile' 
-        ? window.addEventListener('touchmove', this.preventEvent, { passive: false })
-        : window.removeEventListener('touchmove', this.preventEvent, { passive: false });
+      if(window.APP.menu && this.state.device === 'mobile') {
+        window.addEventListener('touchmove', this.preventEvent, { passive: false });
+        window.addEventListener('wheel', this.preventEvent, { passive: false })
+        
+      } else {
+        window.removeEventListener('touchmove', this.preventEvent, { passive: false });
+        window.removeEventListener('wheel', this.preventEvent, { passive: false })
+      }
     }
     else {
       window.removeEventListener('touchmove', this.preventEvent, { passive: false });

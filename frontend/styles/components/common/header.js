@@ -21,7 +21,7 @@ export default css`
     .menuicon {
       overflow: visible;
       position: absolute;
-      margin-top: 4px;
+      padding-top: 2px;
       top: $layoutGAP;
       right: $layoutGAP;
       align-self: flex-start;

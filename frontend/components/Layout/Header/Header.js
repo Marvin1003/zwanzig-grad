@@ -58,10 +58,12 @@ class Header extends React.Component {
     this.setScrollHeight();
     this.scrollTop = this.getScrollTop();
 
-    if(this.scrollTop > this.prevScrollTop && this.scrollTop >= 0 && this.prevScrollTop >= 0) 
-      this.tween.play();
-    else if(this.scrollTop < this.scrollHeight - 5)
-      this.tween.reverse();
+    if(!window.APP.menu) {
+      if(this.scrollTop > this.prevScrollTop && this.scrollTop >= 0 && this.prevScrollTop >= 0) 
+        this.tween.play();
+      else if(this.scrollTop < this.scrollHeight - 5)
+        this.tween.reverse();
+    }
 
     this.prevScrollTop = this.getScrollTop();
   }

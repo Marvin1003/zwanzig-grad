@@ -16,6 +16,7 @@ export default css`
       }
     }
     svg {
+      position: absolute;
       overflow: visible;
       height: 100%;
       width: 100%;
