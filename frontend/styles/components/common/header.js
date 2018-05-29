@@ -18,17 +18,6 @@ export default css`
     justify-content: space-between;
     color: black;
     z-index: 101;
-    .background {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0; 
-      left: 0;
-      background: white;
-      transform-origin: 0 0;
-      transform: scaleY(0);
-    }
-
     .menuicon {
       overflow: visible;
       position: absolute;

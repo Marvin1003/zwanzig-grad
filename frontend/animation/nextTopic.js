@@ -1,4 +1,4 @@
-let timeline, timeout, tween;
+let timeline, timeout, tween, active;
 
 export default function(headlineArr, colorArr, direction, initial) {
   if(location.pathname !== '/')
@@ -21,7 +21,6 @@ export default function(headlineArr, colorArr, direction, initial) {
   const tl = new TimelineLite();
   
   let reverseHover = false;
-  let active = false;
 
   let reverse = true;
   
@@ -33,6 +32,8 @@ export default function(headlineArr, colorArr, direction, initial) {
 
     // UPDATE CURRENTLINK
     this.updateCurrentLink();
+
+    active = false;
 
     TweenLite.set(target[window.APP.nextSection], { visibility: 'visible' });
   
@@ -184,7 +185,7 @@ export default function(headlineArr, colorArr, direction, initial) {
         reverseHover = false;
         if(target === nextCircle) {
           active = false;
-          reverse = false
+          reverse = false;
         } else
           reverse = true;
 
@@ -229,26 +230,25 @@ export default function(headlineArr, colorArr, direction, initial) {
 
     try {
       if((timeline.isActive() || reverseHover) && !active) {
-        active = true;
         try {
           reverseHover && tween.pause();
         } catch(e) { }
         try {
           timeline.pause();
         } catch(e) { }
-        TweenLite.to(nextCircle, 1, { strokeDashoffset: 301.593, ease: 'zwanzig-grad', onComplete: continueDiashow });
+        active = true;
+        TweenLite.to(nextCircle, 1, { strokeDashoffset: 301.593, ease: 'zwanzig-grad', 
+        onComplete: continueDiashow });
       }
     } catch(e) { }
   } 
     
     
   function continueDiashow(e) {
-    if(!window.APP.autoScrolling && active) {
-      reverseHover = false;
-      active = false;
-      timeline.kill();
-      timeline.restart();
-    }
+    active = false;
+    reverseHover = false;
+    timeline.kill();
+    timeline.restart();
   }
 
   // CUSTOM MOUSEEND EVENT

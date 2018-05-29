@@ -27,7 +27,7 @@ class Header extends React.Component {
 
     this.navHeight = this.nav.current.clientHeight;
 
-    this.alternativeElem = document.querySelectorAll('.parallax')[0] || document.querySelectorAll('.container')[0] || document.querySelectorAll('.layout_wrapper')[0];
+    this.alternativeElem = document.querySelector('.parallax') || document.querySelector('.container') || document.querySelector('.layout_wrapper');
 
     window.addEventListener('resize', this.setScrollHeight);
     document.body.addEventListener("scroll", this.animateHeader)
@@ -76,7 +76,6 @@ class Header extends React.Component {
     return (
       <nav ref={this.nav} className={`standard_nav ${this.props.header}`} >
         <style jsx>{style}</style>
-        <div ref={this.background} className="background" />
         <Link className="logo header_item pointer" href="">
           <img src="../static/images/Logo.png" alt="20° Logo" />
         </Link>
