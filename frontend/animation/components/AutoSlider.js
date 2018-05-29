@@ -139,6 +139,7 @@ export default class AutoSlider extends React.Component {
   render() {
     return (
       <Lazy
+        lazy={false}
         master={this.props.images}
         imgType="parkett"
         imgTag={false}
@@ -146,7 +147,6 @@ export default class AutoSlider extends React.Component {
         outerStyle={this.style.imgOuter}
         innerStyle={this.style.imgInner}
         group={true}
-        autoSlider={true}
         start={this.startAutoslider}
         className="auto_slider"
         parallaxFix={this.props.scaleFix}

@@ -5,7 +5,7 @@ export default class extends React.Component {
   menuItems = ['Parkett', 'Treppe', 'Moebel', 'Innenausbau'].map(elem => (
     <li key={elem} className="mobile_menu_headline quattrocento_normal" 
       onClick={() => this.props.routeHandling(elem.toLowerCase())}>
-      <a>{elem}</a>
+      <a><h1>{elem}</h1></a>
     </li>
   ));
 
@@ -52,20 +52,20 @@ export default class extends React.Component {
             <hr className="stroke" />
             <div className="info_container">
               <div className="adresse info_menu stagger_item">
-                <h3 className="didonesque_normal">Adresse</h3>
-                <span>Wertherstraße 310</span>
+                <h4 className="didonesque_normal">Adresse</h4>
+                <span >Wertherstraße 310</span>
                 <span>33639 Bielefeld</span>
                 <span>Germany</span>
               </div>
               <div className="kontakt info_menu stagger_item">
-                <h3 className="didonesque_normal">Kontakt</h3>
+                <h4 className="didonesque_normal">Kontakt</h4>
                 <span><a href="tel:+49 171 64 30 96 2">+49 171 64 30 96 2</a></span>
                 <span><a href="tel:+49 521 52 14 00 2">+49 521 52 14 00 2</a></span>
                 <span><a href="mailto:info@zwanzig-grad.de">info@zwanzig-grad.de</a></span>
               </div>
             </div>
           </div>
-          <a onClick={() => this.props.routeHandling('impressum')} className="corner_buttons impressum stagger_item">Impressum</a>
+          <a onClick={() => this.props.routeHandling('impressum')} className="corner_buttons font_medium impressum stagger_item">Impressum</a>
         </nav>
       </>
     );

@@ -1,28 +1,9 @@
 import css from 'styled-jsx/css';
 
 export default css`
-  // RESPONSIVE 
-  $breakpoints: (
-    "phone":        400px,
-    "phone-wide":   480px,
-    "phablet":      560px,
-    "tablet-small": 640px,
-    "tablet":       768px,
-    "tablet-wide":  1025px,
-    "desktop":      1248px,
-    "desktop-wide": 1440px
-  );
-  @mixin responsive($width, $type: min) {
-    @if map_has_key($breakpoints, $width) {
-        $width: map_get($breakpoints, $width);
-        @if $type == max {
-            $width: $width - 1px;
-        }
-        @media only screen and (#{$type}-width: $width){
-            @content;
-        }
-    }
-  }
+  //-------------------------------------
+
+  @import './frontend/styles/mixins/responsive.scss';
 
   //-------------------------------------
 
@@ -38,7 +19,6 @@ export default css`
     :global(.submit) {
       position: relative;
       bottom: 20px;
-      font-size: 20px;
       background-color: transparent;
       border: 0;
       outline: 0;
@@ -54,7 +34,6 @@ export default css`
     .label {
       position: absolute;
       left: 0;
-      font-size: 14px;
       color: #808080;
       z-index: -1;
     }
@@ -66,7 +45,6 @@ export default css`
     }
     
     .textarea, .input {
-      font-size: 16px;
       padding-bottom: 2px;
       outline: none;
       width: 100%;
@@ -80,7 +58,6 @@ export default css`
     .status {
       display: none;
       position: absolute;
-      font-size: 24px;
       font-weight: normal;
     }
   }

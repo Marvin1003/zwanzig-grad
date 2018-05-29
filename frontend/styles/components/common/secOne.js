@@ -1,74 +1,13 @@
 import css from 'styled-jsx/css';
 
 export default css`
-  // RESPONSIVE 
-  $breakpoints: (
-    "phone":        400px,
-    "phone-wide":   480px,
-    "phablet":      560px,
-    "tablet-small": 640px,
-    "tablet":       768px,
-    "tablet-wide":  1025px,
-    "desktop":      1248px,
-    "desktop-wide": 1440px
-  );
-  @mixin responsive($width, $type: min) {
-    @if map_has_key($breakpoints, $width) {
-        $width: map_get($breakpoints, $width);
-        @if $type == max {
-            $width: $width - 1px;
-        }
-        @media only screen and (#{$type}-width: $width){
-            @content;
-        }
-    }
-  }
-
   //-------------------------------------
 
-  // PARALLAX
-  @mixin calcDistance($direction, $directionPX, $distanceZ){
-    #{$direction} : calc(#{$directionPX} * (#{-($distanceZ - 1)}));
-  }
-  @mixin autoSliderDimensions($dimension, $size, $distanceZ){
-    #{$dimension} : calc(#{$size} * (#{-($distanceZ - 1)}));
-  }
-  @mixin calcMarginPadding($distanceZ, $MorP, $top : 0px, $right : 0px, $bottom : 0px, $left: 0px){
-    #{$MorP} : calc(#{$top} * (#{-($distanceZ - 1)})) calc(#{$right} * (#{-($distanceZ - 1)})) calc(#{$bottom} * (#{-($distanceZ - 1)}))  calc(#{$left} * (#{-($distanceZ - 1)}));
-  }
-  @mixin parallax(
-    $distance: 0,
-    $rotate: 0,
-    $autoSlider: false
-  )
-  {
-    z-index: $distance * 1000;
-    transform-origin: 0 0;
-
-    @if $rotate != 0{
-      transform-origin: initial;
-      transform:
-        translateZ($distance * 1px)
-        scale(abs($distance - 1))
-        rotate(#{$rotate})
-    }
-    @else if $autoSlider == true {
-      transform: 
-        translateZ($distance * 1px)
-    }
-    @else{
-      transform:
-        translateZ($distance * 1px)
-        scale(abs($distance - 1))
-    }
-  }
+    @import './frontend/styles/mixins/responsive.scss';
+    @import './frontend/styles/mixins/parallax.scss';
+    @import './frontend/styles/mixins/variables.scss';
 
   //-------------------------------------
-
-  $layoutGAP: 10vw;
-  $zwanzig-grad-rot: #6D2A2A;
-  $zwanzig-grad-rot-dunkel: #3B1717;
-  $zwanzig-grad-gruen: #C1C12B;
 
   :global(.parallax) {
     @include responsive('tablet-wide', min) {
@@ -140,6 +79,9 @@ export default css`
       top: 32.5vh;
       left: 50%;
       transform: translateX(-50%);
+      @include responsive('phone', min) {
+        width: 75%;
+      }
       @media only screen and (orientation: landscape) {
         top: 30vh;
         height: 40vh;

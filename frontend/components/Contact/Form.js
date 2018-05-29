@@ -153,11 +153,11 @@ export default class extends PureComponent {
             bgColor="white"
             color="#C1C12B"
             tag="button"
-            className="submit didonesque_normal"
+            className="submit font_medium didonesque_normal"
             style={{ opacity: 1 }}
             /> :
             // INVISIBLE NON FUNCTIONAL PLACEHOLDER
-            <div className="submit notverified">senden</div> 
+            <div className="submit font_medium notverified">senden</div> 
         }
         <ReCAPTCHA
           ref={this.captcha}

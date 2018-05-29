@@ -1,31 +1,6 @@
 import css from 'styled-jsx/css';
 
 export default css`
-  // RESPONSIVE 
-  $breakpoints: (
-    "phone":        400px,
-    "phone-wide":   480px,
-    "phablet":      560px,
-    "tablet-small": 640px,
-    "tablet":       768px,
-    "tablet-wide":  1025px,
-    "desktop":      1248px,
-    "desktop-wide": 1440px
-  );
-  @mixin responsive($width, $type: min) {
-    @if map_has_key($breakpoints, $width) {
-        $width: map_get($breakpoints, $width);
-        @if $type == max {
-            $width: $width - 1px;
-        }
-        @media only screen and (#{$type}-width: $width){
-            @content;
-        }
-    }
-  }
-
-  //-------------------------------------
-
   // MENU MOBILE
   :global(.menu) {
     width: 100vw;
@@ -48,7 +23,6 @@ export default css`
 
     .impressum {
       position: absolute;
-      left: 10vw;
       text-transform: lowercase;
     }
 
@@ -82,15 +56,6 @@ export default css`
           &:last-child {
             margin: 0;
           }
-          @include responsive('phone-wide', max) {
-            font-size: 26px;
-          }
-          @include responsive('phone-wide', min) {
-            font-size: 35px;
-          }
-          @include responsive('tablet', min) {
-            font-size: 45px;
-          }
         }
       }
       .info_container {
@@ -101,52 +66,50 @@ export default css`
           &:first-of-type {
             margin-bottom: 35px;
           }
-          h3 {
+          h4 {
             align-self: flex-start;
-            font-size: 16px;
             margin-bottom: 20px;
           }
           span {
             align-self: flex-start;
-            font-size: 12px;
             padding: 5px 0;
-            display: block;
           }
         }
       }
       @media only screen and (max-height: 650px) {
-        font-size: 22px;
         .info_container {
           margin-bottom: 50px;
           .info_menu {
             &:first-of-type {
               margin-bottom: 20px
             }
-            h3 {
-              font-size: 14px;
+            h4 {
               margin-bottom: 10px;
             }
           }
         }
       }
     }
-    @media only screen and (max-height: 550px) and (orientation: portrait) {
-      :global(.mobile_menu_headline) {
-        font-size: 22px !important;
-      }
-      h3 {
-        font-size: 12px !important;
-      }
-      span {
-        font-size: 10px !important;
-      }
-    }
-    @media only screen and (max-height: 500px) {
+    @media only screen and (max-height: 600px) {
       .info_container {
         display: flex;
         justify-content: space-between;
+        @media only screen and (orientation: landscape) {
+          .info_menu:first-of-type {
+            margin-right: 25px;
+          }
+        }
       }
     }
+    @media only screen and (max-height: 500px) and (orientation: portrait) {
+      .info_container {
+        display: none;
+      }
+      .stroke {
+        display: none;
+      }
+    }
+
     @media only screen and (orientation: landscape) {
       align-items: center;
       .closemenu {
@@ -168,31 +131,17 @@ export default css`
           margin: 0;
         }
       }
-      @media only screen and (max-width: 700px) {
-        .info_menu {
-          font-size: 14px;
-        }
-        :global(.mobile_menu_headline) {
-          font-size: 35px;
-        }
-      }
       @media only screen and (max-height: 500px) {
         ul {
           margin-bottom: 30px;
-        }
-        :global(.mobile_menu_headline) {
-          font-size: 30px !important;
         }
         .info_container {
           margin-bottom: 0 !important;
         }
       }
-      @media only screen and (max-height: 400px) {
-        .info_container {
-          display: none;
-        }
-        :global(.mobile_menu_headline) {
-          font-size: 20px !important;
+      @media only screen and (max-height: 420px) {
+        .impressum {
+          right: 10vw;
         }
       }
     }

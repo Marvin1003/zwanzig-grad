@@ -121,6 +121,7 @@ class SecNext extends React.Component {
           <div onClick={this.animate} onMouseEnter={this.hoverPlay} onMouseLeave={this.hoverReverse}className="sec_next_topic"><h1 className="quattrocento_normal">{this.props.next}</h1></div>
           <div onClick={this.animate} onMouseEnter={this.hoverPlay} onMouseLeave={this.hoverReverse} className="sec_next_image">
             <Lazy
+              lazy={false}
               master={5}
               imgType={this.next}
               alt={this.next + 5}

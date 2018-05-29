@@ -28,7 +28,6 @@ class LazyLoading extends PureComponent {
     outerStyle: {},
     innerStyle: {},
     parallaxFix: '',
-    autoSlider: false,
     animate: true
   }
 
@@ -59,7 +58,7 @@ class LazyLoading extends PureComponent {
     // THERE SEEMS TO BE AN ISSUE AS SOME PICTURES ARE PLACED OUTSITE OF THE VIEWPORT ON THE X AXIS (EVEN THO THEY ARE VISUALLY PLACED INSIDE OF IT - THIS IS THE MAGIC OF THE PERSPECTIVE AND TRANSFORM). BUT THIS PROBLEM RESULTS IN THE ELEMENT NEVER BEING TREATED AS IN THE VIEWPORT - SO isInterescting WILL REMAIN FALSE 
 
     const options = {
-      rootMargin: '10px 0px 10px 0px',
+      rootMargin: '0px 0px 0px 0px',
       threshold: 0
     }
     
@@ -92,7 +91,11 @@ class LazyLoading extends PureComponent {
 
   showImage(image) {
     this.images = this.props.group ? this.groupImages : [this.image.current];
-    this.createObserver(this.container.current);
+    if(this.props.lazy) {
+      this.createObserver(this.container.current);
+    } else {
+      this.lazyLoading(this.images);
+    }
   }
 
   applySource(image, src) {

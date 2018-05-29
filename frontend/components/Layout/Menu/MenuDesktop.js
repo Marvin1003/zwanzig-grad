@@ -78,6 +78,7 @@ class Menu extends React.Component {
         </nav>
         <div className="impressum_wrapper">
           <TextHover
+            tag="h4"
             onClick={this.props.routeHandling}
             name="impressum"
             link="impressum"

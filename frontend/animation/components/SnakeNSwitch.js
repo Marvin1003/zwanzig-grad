@@ -137,6 +137,7 @@ export default class SnakeNSwitch extends React.Component {
     this.setState({
       content: 
         <Lazy
+          lazy={false}
           master={this.data.images[window.APP.nextSection]}
           imgType={content}
           imgTag={false}

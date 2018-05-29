@@ -1,33 +1,12 @@
 import css from 'styled-jsx/css';
 
 export default css`
-  // RESPONSIVE 
-  $breakpoints: (
-    "phone":        400px,
-    "phone-wide":   480px,
-    "phablet":      560px,
-    "tablet-small": 640px,
-    "tablet":       768px,
-    "tablet-wide":  1025px,
-    "desktop":      1248px,
-    "desktop-wide": 1440px
-  );
-  @mixin responsive($width, $type: min) {
-    @if map_has_key($breakpoints, $width) {
-        $width: map_get($breakpoints, $width);
-        @if $type == max {
-            $width: $width - 1px;
-        }
-        @media only screen and (#{$type}-width: $width){
-            @content;
-        }
-    }
-  }
-
   //-------------------------------------
-  $layoutGAP: 10vw;
-  $zwanzig-grad-rot: #6D2A2A;
-  $zwanzig-grad-gruen: #C1C12B;
+
+  @import './frontend/styles/mixins/responsive.scss';
+  @import './frontend/styles/mixins/variables.scss';
+  
+  //-------------------------------------
 
   :global(section) {
     display: inline-block;
@@ -51,18 +30,8 @@ export default css`
       transform: translate(-50%, -50%);
     }
     .topic {
-      white-space: nowrap;
-      max-width: 100%;
       text-transform: capitalize;
-      @include responsive('tablet-wide', min) {
-        font-size: 50px;
-      }
-      @include responsive('tablet-wide', max) {
-        font-size: 30px;
-      }
-      @media only screen and (max-width: 350px) {
-        font-size: 24px;
-      }
+      word-break: break-all;
     }
   }
 
@@ -124,7 +93,6 @@ export default css`
 
     .current_section {
       left: 0;
-      font-size: 12px;
       span {
         padding: 0 3px;
       }

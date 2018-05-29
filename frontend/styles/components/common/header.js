@@ -1,34 +1,14 @@
 import css from 'styled-jsx/css';
 
 export default css`
-  // RESPONSIVE 
-  $breakpoints: (
-    "phone":        400px,
-    "phone-wide":   480px,
-    "phablet":      560px,
-    "tablet-small": 640px,
-    "tablet":       768px,
-    "tablet-wide":  1025px,
-    "desktop":      1248px,
-    "desktop-wide": 1440px
-  );
-  @mixin responsive($width, $type: min) {
-    @if map_has_key($breakpoints, $width) {
-        $width: map_get($breakpoints, $width);
-        @if $type == max {
-            $width: $width - 1px;
-        }
-        @media only screen and (#{$type}-width: $width){
-            @content;
-        }
-    }
-  }
+  //-------------------------------------
 
+  @import './frontend/styles/mixins/responsive.scss';
+  @import './frontend/styles/mixins/variables.scss';
+  
   //-------------------------------------
 
   // DEFAULT 
-  
-  $layoutGAP: 10vw;
   
   .standard_nav {
     width: 100vw;
@@ -50,7 +30,9 @@ export default css`
     }
 
     .menuicon {
+      overflow: visible;
       position: absolute;
+      margin-top: 4px;
       top: $layoutGAP;
       right: $layoutGAP;
       align-self: flex-start;

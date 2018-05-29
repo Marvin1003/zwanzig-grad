@@ -1,8 +1,14 @@
 import css from 'styled-jsx/css';
 
 export default css`
-  $layoutGAP: 10vw;
+  //-------------------------------------
+
+    @import './frontend/styles/mixins/variables.scss';
+
+  //-------------------------------------
+
   $height: 37%;
+  
   // MENU DESKTOP
   :global(.container) {
     cursor : -webkit-grab;
@@ -62,7 +68,6 @@ export default css`
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    font-size: 35px;
     overflow: hidden;
     :global .lazy_container{
       position: relative;
