@@ -3,8 +3,8 @@ import css from 'styled-jsx/css';
 export default css`
   //-------------------------------------
 
-  @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/variables.scss';
+  @import './frontend/styles/mixins/responsive.scss';
   
   //-------------------------------------
 
@@ -17,21 +17,22 @@ export default css`
 
   .topic_container {
     display: inline-block;
-    position: fixed;
+    position: absolute;
     overflow: hidden;
     user-select: none;
     top: 50%;
-    @include responsive('phone-wide', min) {
-      left: 33.33%;
-      transform: translateY(-50%);
-    }
-    @include responsive('phone-wide', max) {
+    transform: translate(-50%, -50%);
+    @include responsive('tablet-wide', max) {
       left: 50%;
-      transform: translate(-50%, -50%);
+    }
+    @include responsive('tablet-wide', min) {
+      left: 33.33%;
     }
     .topic {
       text-transform: capitalize;
-      word-break: break-all;
+      @include responsive('phone-wide', max) {
+        hyphens: auto;
+      }
     }
   }
 
@@ -79,9 +80,8 @@ export default css`
 
   .layout {
     width: 100%;
-    height: calc(100% - #{$layoutGAP});
+    height: 100%;
     position: relative;
-    top: $layoutGAP;
     color: white;
     z-index: 10;
     .side {

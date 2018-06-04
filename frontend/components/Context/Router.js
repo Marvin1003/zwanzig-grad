@@ -1,6 +1,6 @@
 import Router from 'next/router';
 import nextData from '../../../static/json/nextTransitionData.json';
-
+import Dynamic from 'next/dynamic';
 // RESTUCTURE AND TRY TO SPLIT IN MULTIPLE INDEPENDENT CONTEXTS!
 
 export const RouterContext = React.createContext();
@@ -37,9 +37,12 @@ export class RouterProvider extends React.Component {
   }
 
   nextRoute = (req, nextAnimation = false) => {
+    req = req.replace(/ö/, 'oe');
     this.nextAnimation = nextAnimation
-    if(req !== location.pathname.slice(1))
+    if(req !== location.pathname.slice(1)) {
+      Router.prefetch(`/${req}`);
       this.fadeIn(req);
+    }
   }
 
   setMountState = (bool) => {
@@ -148,10 +151,12 @@ export class RouterProvider extends React.Component {
           transformOrigin: '0 0',
           alpha: 1,
           top: 0,
-          left: 0
+          left: 0,
+          scale: 0,
+          zIndex: 1000
         });
         TweenLite.fromTo(this.pageTransition.parentNode, 1, 
-          { scaleX: 0, scaleY: 1, zIndex: 1000, transformOrigin: '0 0' }, 
+          { scaleX: 0, scaleY: 1, transformOrigin: '0 0' }, 
           { scaleX: 1, ease: 'zwanzig-grad', onComplete: handleComplete });
       }
     }

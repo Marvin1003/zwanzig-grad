@@ -3,8 +3,8 @@ import css from 'styled-jsx/css';
 export default css`
   //-------------------------------------
 
-  @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/variables.scss';
+  @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/parallax.scss';
 
   //-------------------------------------
@@ -115,7 +115,7 @@ export default css`
       }
     }
     .sec_four_box{
-      background-color: $zwanzig-grad-rot;
+      background: $zwanzig-grad-rot;
       position: absolute;
       @include responsive("tablet-wide", min){
         @include parallax(-2);

@@ -30,10 +30,25 @@ export default class MapPage extends React.Component {
     lng: 8.480096
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.setSeize);
+  }
+
   _mounted() {
     this.map = document.getElementsByClassName("map")[0].childNodes[0];
+    this.wrapper = this.map.parentNode.parentNode;
+
+    this.setSeize();
+    window.addEventListener('resize', this.setSeize);
 
     this.animateMap();
+  }
+
+  setSeize = () => {
+    if(window.innerWidth < 1025) {
+      TweenLite.set(this.wrapper, { height: window.innerHeight * 0.9, top: window.innerHeight * 0.1 });
+      TweenLite.set(this.wrapper.previousSibling, { height: window.innerHeight });
+    }
   }
 
   animateMap() {

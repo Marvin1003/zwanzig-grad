@@ -1,6 +1,6 @@
 import Lazy from '../../components/Utility/LazyLoading';
 
-import runOnce from '../../functions/helper/runOnce';
+import runOnce from '../../functions/runOnce';
 
 /* eslint-disable */
 

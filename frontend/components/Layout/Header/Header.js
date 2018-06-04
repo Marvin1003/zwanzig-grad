@@ -15,6 +15,7 @@ class Header extends React.Component {
     this.scrollTop = 0;
     this.prevScrollTop = 0;
     this.tweening = false;
+    this.device = undefined;
   }
 
   static defaultProps = {
@@ -27,22 +28,36 @@ class Header extends React.Component {
 
     this.navHeight = this.nav.current.clientHeight;
 
-    this.alternativeElem = document.querySelector('.parallax') || document.querySelector('.container') || document.querySelector('.layout_wrapper');
+    this.setAlternativeElem();
 
     window.addEventListener('resize', this.setScrollHeight);
-    document.body.addEventListener("scroll", this.animateHeader)
-    try {
-      this.alternativeElem.addEventListener("scroll", this.animateHeader)
-    } catch(e) { console.log(e) }
+    window.addEventListener('resize', this.setAlternativeElem);
+
+    document.body.addEventListener("scroll", this.animateHeader);
   }
 
   componentWillUnmount() {
-    window.addEventListener('resize', this.setScrollHeight);
-    window.removeEventListener("resize", this.setMaxY);
+    window.removeEventListener('resize', this.setScrollHeight);
+    window.removeEventListener('resize', this.setAlternativeElem);
+    
     document.body.removeEventListener("scroll", this.animateHeader)
     try {
       this.alternativeElem.removeEventListener("scroll", this.animateHeader)
     } catch(e) {}
+  }
+
+  setAlternativeElem = () => {
+    if(window.innerWidth > 1025) {
+      this.alternativeElem = document.querySelector('.parallax') || document.querySelector('.root') || document.querySelector('.layout_wrapper');
+    } else {
+      this.alternativeElem = document.querySelector('.root') || document.querySelector('.layout_wrapper');
+    }
+
+    if(this.device !== this.props.device) {
+      this.alternativeElem.removeEventListener("scroll", this.animateHeader);
+      this.alternativeElem.addEventListener("scroll", this.animateHeader);
+    }
+    this.device = this.props.device;
   }
 
   getScrollTop() {
@@ -51,6 +66,8 @@ class Header extends React.Component {
 
   setScrollHeight = () => {
     this.scrollHeight = Math.max(document.body.scrollHeight, this.alternativeElem.scrollHeight) - window.innerHeight;
+
+    (this.scrollHeight === 0) && this.tween.reverse();
   }
 
   animateHeader = () => {
@@ -79,7 +96,7 @@ class Header extends React.Component {
       <nav ref={this.nav} className={`standard_nav ${this.props.header}`} >
         <style jsx>{style}</style>
         <Link className="logo header_item pointer" href="">
-          <img src="../static/images/Logo.png" alt="20° Logo" />
+          <img src="../static/images/logo/logo-256x256.png" alt="20° Logo" />
         </Link>
         <div ref={this.menuIcon} className="menuicon header_item pointer" onClick={this.onClick}>
           <Menu />
@@ -94,33 +111,3 @@ export default (props) => (
     {(nextRoute) => <Header {...props} {...nextRoute} />}
   </RouterContext.Consumer>
 );
-
-// <div
-//             className="menu_icon"
-//             onClick={this.onClick}
-//             onMouseEnter={() => this.tl.play()}
-//             onMouseLeave={() => this.tl.reverse()}
-//             >
-//             <div>
-//               <div />
-//               <div />
-//             </div>
-//             <div>
-//               <div />
-//               <div />
-//             </div>
-//             <div>
-//               <div />
-//               <div />
-//             </div>
-          // </div>
-// OBSOLETE HAMBURGER
-
-  // const tl = new TimelineLite({ paused: true });
-  // CURRYING TO PREVENT RECREATING FUNCTION
-  // const menuIconHover = (bool) => (e) => {
-  //   tl.staggerTo('.menu_icon > div', 0.75, { x: 10, ease: 'zwanzig-grad' }, 0.1);
-  //   bool ?
-  //     tl.play() :
-  //     tl.reverse();
-  // };

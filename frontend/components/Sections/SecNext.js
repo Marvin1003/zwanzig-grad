@@ -36,7 +36,7 @@ class SecNext extends React.Component {
   }
 
   setScrollHeight = () => {
-    this.scrollHeight = Math.max(document.body.scrollHeight, this.alternativeElem.scrollHeight) - window.innerHeight;
+    this.scrollHeight = Math.max(document.body.scrollHeight, this.alternativeElem.scrollHeight, this.alternativeElem.parentNode.scrollHeight) - window.innerHeight;
   }
 
   removeListener() {
@@ -71,7 +71,7 @@ class SecNext extends React.Component {
           });
           
       } else {
-        tl.set(document.body, { scrollTo: this.scrollHeight, ease: 'zwanzig-grad' })
+        tl.set(this.alternativeElem.parentNode, { scrollTo: this.scrollHeight, ease: 'zwanzig-grad' })
           .to('.sec_next_topic > h1', this.duration, { yPercent: -110, ease: Power4.easeOut })
           .to('.sec_next_image_background', this.duration, { scaleY: 1, ease: 'zwanzig-grad' }, 0)
           .set('.sec_next_wrapper', { display: 'none' })

@@ -56,7 +56,9 @@ export default class DragAnimation {
 
   changeScrollDirection(e) {
     e.preventDefault();
-    const scrollWidth = this.elem.scrollWidth - window.innerWidth;
+    try {
+      var scrollWidth = this.elem.scrollWidth - window.innerWidth;
+    } catch(e) { return; }
 
     if (this.scrollTo < 0)
       this.scrollTo = 0;

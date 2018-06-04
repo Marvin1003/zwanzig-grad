@@ -3,9 +3,9 @@ import css from 'styled-jsx/css';
 export default css`
   //-------------------------------------
 
+  @import './frontend/styles/mixins/variables.scss';
   @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/parallax.scss';
-  @import './frontend/styles/mixins/variables.scss';
 
   //-------------------------------------
 
@@ -15,7 +15,7 @@ export default css`
       height: 400vh;
     }
     .sec_two_box{
-      background-color: $zwanzig-grad-rot;
+      background: $zwanzig-grad-rot;
       position: absolute;
       @include responsive("tablet-wide", min){
         left: 60%;
@@ -161,7 +161,7 @@ export default css`
       }
     }
     .sec_five_box{
-      background-color: $zwanzig-grad-rot;
+      background: $zwanzig-grad-rot;
       @include responsive("tablet-wide", min){
         @include parallax(-2);
         @include calcDistance(left, 15% , -2);

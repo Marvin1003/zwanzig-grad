@@ -52,8 +52,7 @@ class Menu extends React.Component {
   }
 
   generateMenu() {
-    const menuItems = ['Parkett', 'Treppe', 'Moebel', 'Innenausbau'];
-    return menuItems.map(elem => {
+    return this.props.menuItems.map(elem => {
       const link = elem.toLowerCase();
       return (
         <li key={elem} onClick={() => this.props.routeHandling(link)}>

@@ -1,6 +1,12 @@
 import css from 'styled-jsx/css';
 
 export default css`
+  //-------------------------------------
+
+  @import './frontend/styles/mixins/variables.scss';
+
+  //-------------------------------------
+  
   // MENU MOBILE
   :global(.menu) {
     width: 100vw;
@@ -12,7 +18,7 @@ export default css`
     display: flex;
     align-items: flex-end;
     position: relative;
-    padding: calc(10vw + 50px) 10vw 10vw 10vw;
+    padding: calc(#{$layoutGAP} + 50px) $layoutGAP $layoutGAP $layoutGAP;
     height: 100%;
     width: 100%;
     .closemenu {
@@ -141,7 +147,7 @@ export default css`
       }
       @media only screen and (max-height: 420px) {
         .impressum {
-          right: 10vw;
+          right: $layoutGAP;
         }
       }
     }

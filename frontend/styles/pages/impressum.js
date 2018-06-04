@@ -3,14 +3,13 @@ import css from 'styled-jsx/css';
 export default css`
   //-------------------------------------
   
-  @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/variables.scss';
+  @import './frontend/styles/mixins/responsive.scss';
 
   //-------------------------------------
 
   // IMPRESSUM
   .wrapper {
-    color: rgba(0,0,0,0.5);
     hyphens: auto;
     text-align: justify;
     display: flex;
@@ -20,8 +19,9 @@ export default css`
     @include responsive('tablet-wide', max) {
       flex-direction: column;
     }
-   
+
     .info {
+      color: rgba(0,0,0,0.5);
       max-width: 250px;
       display: flex;
       flex-direction: column;
@@ -38,6 +38,7 @@ export default css`
     }
       
     .rechtliches {
+      color: rgba(0,0,0,0.5);
       line-height: 1.75;
       max-width: 600px;
       :global(h3) {

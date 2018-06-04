@@ -3,9 +3,9 @@ import css from 'styled-jsx/css';
 export default css`
   //-------------------------------------
 
+  @import './frontend/styles/mixins/variables.scss';
   @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/parallax.scss';
-  @import './frontend/styles/mixins/variables.scss';
 
   //-------------------------------------
   
@@ -33,7 +33,7 @@ export default css`
         position: absolute;
         width: 30%;
         height: 20vh;
-        background-color: $zwanzig-grad-rot;
+        background: $zwanzig-grad-rot;
       }
     }
     :global([data-name="lazy"]) {

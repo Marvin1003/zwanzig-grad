@@ -6,22 +6,13 @@ export default css`
   @import './frontend/styles/mixins/variables.scss';
 
   //-------------------------------------
+  
   // LOADER 
-  .wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    height: 100%;
-    width: 100%;
-    user-select: none;
-    background-color: #3B1717;
+  .page_transition_wrapper {
     transform-origin: 0 0;
-    .loader {
-      width: 100%;
-      height: 100%;
+    transform: scale(1);
+    .page_transition {
       transform-origin: inherit;
-      background-color: $zwanzig-grad-rot;
       text-align: center;
       color: white;
       .zwanzig-grad {

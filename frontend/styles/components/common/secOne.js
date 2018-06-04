@@ -3,13 +3,17 @@ import css from 'styled-jsx/css';
 export default css`
   //-------------------------------------
 
+    @import './frontend/styles/mixins/variables.scss';
     @import './frontend/styles/mixins/responsive.scss';
     @import './frontend/styles/mixins/parallax.scss';
-    @import './frontend/styles/mixins/variables.scss';
 
   //-------------------------------------
+  :global(.root) {
+    background: linear-gradient(white 50%, $zwanzig-grad-rot 50%);
+  }
 
   :global(.parallax) {
+    background: white;
     @include responsive('tablet-wide', min) {
       height: 100vh;
       overflow-x: hidden;
@@ -18,8 +22,7 @@ export default css`
       perspective: 1px;
       -webkit-overflow-scrolling: touch;
       position: relative;
-      // REMINDER --- & * didnt work
-      & * {
+      &, :global(.section) {
         transform-style: preserve-3d;
       }
     }
@@ -62,7 +65,7 @@ export default css`
     }
     .sec_one_box {
       position: absolute;
-      background-color: $zwanzig-grad-rot;
+      background: $zwanzig-grad-rot;
       @include responsive("tablet-wide", min) {
         @include parallax(-2);
       }
@@ -70,7 +73,6 @@ export default css`
         left: -$layoutGAP;
         top: 50vh;
         width: 100vw;;
-        z-index: -1;
       }
     }
     :global(.auto_slider) {
@@ -154,7 +156,6 @@ export default css`
       }
       @include responsive("tablet-wide", max) {
         height: calc(50vh + 37.5vh + 100px);
-        z-index: -1;
       }
     }
   }
@@ -174,7 +175,7 @@ export default css`
     .sec_one_box_moebel{
       @include responsive("tablet-wide", min) {
         @include calcDistance(top, 25vh, -2 );
-        @include calcDistance(left, 10vw, -2);
+        @include calcDistance(left, $layoutGAP, -2);
         @include calcMarginPadding(-1, margin, 0px, 0px, 0px, $layoutGAP);
         width: 60vw;
         height: 50vh;
@@ -182,7 +183,6 @@ export default css`
       @include responsive("tablet-wide", max) {
         width: 100vw;
         height: calc(50vh + 15vh + 100px);
-        left: -$layoutGAP;
         bottom: 0;
       }
     }

@@ -3,10 +3,10 @@ import css from 'styled-jsx/css';
 export default css`
   //-------------------------------------
 
+  @import './frontend/styles/mixins/variables.scss';
   @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/parallax.scss';
-  @import './frontend/styles/mixins/variables.scss';
-
+  
   //-------------------------------------
 
   // SECTION TWO
@@ -24,7 +24,7 @@ export default css`
         position: absolute;
         width: 30%;
         height: 22.685185185185185vh;
-        background-color: $zwanzig-grad-rot;
+        background: $zwanzig-grad-rot;
       }
     }
     .sec_two_text {
@@ -83,7 +83,6 @@ export default css`
       }
       @include responsive("tablet-wide", max) {
         position: relative;
-        z-index: -1;
         width: 100%;
         height: 75vh;
         margin-top: 50px;

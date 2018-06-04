@@ -2,8 +2,7 @@ import { PureComponent } from 'react';
 
 import { WebPContext } from '../Context/WebP';
 
-import cookieChecker from '../../functions/helper/cookieChecker';
-import runOnce from '../../functions/helper/runOnce';
+import runOnce from '../../functions/runOnce';
 
 class LazyLoading extends PureComponent {
   constructor(props) {

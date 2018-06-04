@@ -4,9 +4,9 @@ import style from '../../styles/components/common/secOne';
 export default ({ title }) => {
   title = title.toLowerCase();
   return (
-    <section className={`section sec_one sec_one_${title}`}>
+    <section className={`section sec_one sec_one_${title.replace(/ö/, 'oe')}`}>
       <style jsx>{style}</style>
-      <div className={`sec_one_box sec_one_box_${title}`} />
+      <div className={`sec_one_box sec_one_box_${title.replace(/ö/, 'oe')}`} />
       <AutoSlider
         parallax={true}
         delay={0.5}

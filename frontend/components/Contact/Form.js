@@ -130,15 +130,15 @@ export default class extends PureComponent {
     return (
       <form action="/send" method="POST" className="form didonesque_normal" ref={this.form}>
         <style jsx>{style}</style>
-        <div>
+        <div className="field">
           <input type="text" name="name" className="input" required />
           <label htmlFor="name" className="label">Name</label>
         </div>
-        <div>
+        <div className="field">
           <input type="email" name="email" className="input" required />
           <label htmlFor="email" className="label">Email Adresse</label>
         </div>
-        <div>
+        <div className="field">
           <input type="tel" pattern="^(\+?([0-9]{2})?)([-.\s])?(([0-9]{3,5})([-.\s])([0-9]{3,5})?([-\.\s])([0-9]{3,5})|([0-9]{7,14}))$" name="tel" className="input" required />
           <label htmlFor="name" className="label">Telefon</label>
         </div>

@@ -1,17 +1,15 @@
 import css from 'styled-jsx/css';
 
 export default css`
-//-------------------------------------
+  //-------------------------------------
 
-  @import './frontend/styles/mixins/responsive.scss';
-  @import './frontend/styles/mixins/parallax.scss';
   @import './frontend/styles/mixins/variables.scss';
+  @import './frontend/styles/mixins/responsive.scss';
 
-//-------------------------------------
+  //-------------------------------------
 
 
   // SEC NEXT
-  
   .sec_next {
     width: 100vw;
     display: flex;
@@ -34,7 +32,6 @@ export default css`
       left: 0;
       background: $zwanzig-grad-rot;
       transform-origin: 100% 100%;
-      z-index: -1;
     }
     .sec_next_topic {
       overflow: hidden;
@@ -42,13 +39,14 @@ export default css`
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      z-index: 1;
       color: white;
       text-transform: capitalize;
+      z-index: 2;
     }
     :global(.sec_next_wrapper) {
       cursor: pointer;
       position: absolute;
+      z-index: 1;
       width: calc(100% - (#{$layoutGAP} * 2));
       @include responsive('tablet-wide', max) {
         top: 50%;
@@ -72,6 +70,7 @@ export default css`
         background: $zwanzig-grad-rot;
         transform-origin: 100% 100%;
         transform: scaleY(0);
+        z-index: 3;
       }
       img {
         height: 100%;

@@ -1,9 +1,7 @@
-
-import { PureComponent } from 'react';
-import toSpan from '../../functions/helper/toSpan';
+import toSpan from '../../functions/toSpan';
 import style from '../../styles/components/common/pageLoader';
 
-export default class extends PureComponent {
+export default class extends React.Component {
   constructor(props) {
     super(props);
     
@@ -70,10 +68,10 @@ export default class extends PureComponent {
   
   render() {
     return (
-      <div className="wrapper">
+      <div className="page_transition_wrapper">
         <style jsx>{style}</style>
-        <div ref={this.loader} className="loader didonesque_normal">
-          <div ref={this.textZwanzig} className="zwanzig-grad">zwanzig-grad</div>
+        <div ref={this.loader} className="page_transition didonesque_normal">
+          <div ref={this.textZwanzig} className="zwanzig-grad">zwanzig grad</div>
         </div>
       </div>
     );

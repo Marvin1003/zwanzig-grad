@@ -1,4 +1,6 @@
 
+import Router from 'next/router';
+
 export default function autoScroller() {
   let scrollSpeed;
   let prevTouch = 0;
@@ -8,27 +10,38 @@ export default function autoScroller() {
   const minSwipe = 30;
   const wheelData = [];
 
-  window.addEventListener('wheel', preventScrolling, { capture: true });
-  window.addEventListener('wheel', autoScroll);
-  window.addEventListener('touchstart', touchSafeScroll, { passive: true });
-  window.addEventListener('touchmove', toggleActiveTouch, { passive: false });
-  window.addEventListener('touchend', autoScroll, { passive: true });
-  window.addEventListener('keyup', handleArrowNavigation);
-
-  buttons();
+  Router.onRouteChangeStart = (url) => {
+    window.removeEventListener('wheel', preventScrolling, { capture: true });
+    window.removeEventListener('wheel', autoScroll);
+    window.removeEventListener('touchstart', touchSafeScroll, { passive: true });
+    window.removeEventListener('touchmove', toggleActiveTouch, { passive: false });
+    window.removeEventListener('touchend', autoScroll, { passive: true });
+    window.removeEventListener('keyup', handleArrowNavigation);
+    Router.onRouteChangeStart = null;
+  }
+    
   initiateAnimation(true);
+
+  // WAIT UNTIL PICTURES ARE LOADED
+  document.readyState === 'complete'
+    ? startInteractive()
+    : window.addEventListener('load', startInteractive)
+    
   /* FUNCTIONS */
+  
+  function startInteractive() {
+    buttons();
+    window.addEventListener('wheel', preventScrolling, { capture: true });
+    window.addEventListener('wheel', autoScroll);
+    window.addEventListener('touchstart', touchSafeScroll, { passive: true });
+    window.addEventListener('touchmove', toggleActiveTouch, { passive: false });
+    window.addEventListener('touchend', autoScroll, { passive: true });
+    window.addEventListener('keyup', handleArrowNavigation);
+  }
+
 
   function autoScroll(e) {
-    // REMOVE IF USER LEFT HOME OR OPENED MENU
-    if (location.pathname.slice(1) !== '') {
-      window.removeEventListener('wheel', preventScrolling, { capture: true });
-      window.removeEventListener('wheel', autoScroll);
-      window.removeEventListener('touchstart', touchSafeScroll, { passive: true });
-      window.removeEventListener('touchmove', toggleActiveTouch, { passive: false });
-      window.removeEventListener('touchend', autoScroll, { passive: true });
-      window.removeEventListener('keyup', handleArrowNavigation);
-    }
+    // RETURN IF MENU IS OPEN
     if(window.APP.menu || location.pathname.slice(1) !== '') 
       return false;
 
@@ -164,24 +177,3 @@ export default function autoScroller() {
   //   }
   //   window.addEventListener('wheel', wheelEnd);
   // }
-
-// let smallestOffset = Math.min(...Array.from(sections,
-//   (section) => Math.abs(section.getBoundingClientRect().top)));
-
-// const currentSection = sections.indexOf(
-// sections.find((section) => {
-//   if(Math.abs(section.getBoundingClientRect().top) === smallestOffset)
-//     return sections;
-// }));
-// return currentSection;
-
-
-// function currentSection() {
-//   let initial = sections[0];
-//   for (let i = 0; i < sectionAmount - 1; i++) {
-//     const nextSection = sections[i + 1];
-//     if ((Math.abs(initial.offsetTop) > Math.abs(nextSection.offsetTop))) 
-//       initial = nextSection;
-//   }
-//   return sections.indexOf(initial);
-// }

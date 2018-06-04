@@ -2,7 +2,7 @@ import style from '../../../styles/components/mobile/menuMobile';
 import Link from '../../Utility/Link';
 
 export default class extends React.Component {
-  menuItems = ['Parkett', 'Treppe', 'Moebel', 'Innenausbau'].map(elem => (
+  menuItems = this.props.menuItems.map(elem => (
     <li key={elem} className="mobile_menu_headline quattrocento_normal" 
       onClick={() => this.props.routeHandling(elem.toLowerCase())}>
       <a><h1>{elem}</h1></a>

@@ -44,10 +44,12 @@ export default function(headlineArr, colorArr, direction, initial) {
 
       // SPEED UP TIMELINE
       const strokeDashoffset = direction === 'down' ? 0 : 301.593;
-      const tl2 = new TimelineLite();
+      const tl2 = new TimelineLite({ paused: true });
       tl2.to(nextCircle, 0.5, { strokeDashoffset, ease: 'zwanzig-grad' })
-         .to(nextCircle, 0.5, { alpha: 0, ease: Power4.easeOut });
-      TweenLite.to(prevCircle, 0.5, { strokeDashoffset: 301.593 });
+         .to(nextCircle, 0.5, { alpha: 0, ease: Power4.easeOut })
+         .to(prevCircle, 0.5, { strokeDashoffset: 301.593 }, 0);
+
+      whenReady(playTL, tl2);
 
       if(direction === 'down') {   
         setZindex(2, 1);
@@ -67,7 +69,7 @@ export default function(headlineArr, colorArr, direction, initial) {
       }
     } else {
       try {
-        desktopDiashowManager();
+        whenReady(desktopDiashowManager, false);
       } catch(e) { }
       TweenLite.set(target[window.APP.nextSection], { xPercent: 0, zIndex: 2, ease: 'zwanzig-grad' });
     }
@@ -97,7 +99,6 @@ export default function(headlineArr, colorArr, direction, initial) {
             { yPercent: 0, ease: 'zwanzig-grad' });
         }
       })
-
     } else {
       var headlineTL = new TimelineLite({ onComplete: handleComplete });
 
@@ -117,13 +118,25 @@ export default function(headlineArr, colorArr, direction, initial) {
     try {
       timeline.kill();
     } catch(e) { }
-    timeline = new TimelineLite({ onComplete: () =>{ window.APP.nextTopic('down', false) } 
-      });
+    timeline = new TimelineLite({ onComplete: () => window.APP.nextTopic('down', false), paused: true });
     timeline
-      .set(nextCircle, { alpha: 1 })
-      .fromTo(nextCircle, diashowInterval / 1000, 
-        { strokeDasharray: 301.593, strokeDashoffset: 301.593 },
-        { strokeDashoffset: 0, ease: Power0.easeNone });
+    .set(nextCircle, { alpha: 1 })
+    .fromTo(nextCircle, diashowInterval / 1000, 
+      { strokeDasharray: 301.593, strokeDashoffset: 301.593 },
+      { strokeDashoffset: 0, ease: Power0.easeNone });
+
+    // WAIT UNTIL PICTURES ARE LOADED
+    whenReady(playTL, timeline);
+  }
+
+  function playTL(tl) {
+    tl.play();
+  }
+
+  function whenReady(callback, targetTL = false) {
+    (document.readyState === 'complete')
+        ? callback(targetTL)
+        : window.addEventListener('load', () => callback(targetTL));
   }
 
   function updateNextSection() {
@@ -179,7 +192,7 @@ export default function(headlineArr, colorArr, direction, initial) {
   }
 
   function animateButtons(type, target) {
-    if(!window.APP.autoScrolling && !window.APP.touch) {
+    if(!window.APP.autoScrolling) {
       timeline.pause();
       if(type === 'play') {
         reverseHover = false;

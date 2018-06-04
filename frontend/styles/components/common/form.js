@@ -9,16 +9,20 @@ export default css`
 
   .form {
     width: 100%;
-    margin-top: 50px;
-    :global(div) {
+    position: relative;
+    // top: 50%;
+    // transform: translateY(-50%);
+    .field {
+      position: relative;
       margin-bottom: 40px;
+      transition: margin-bottom ease-out 1s;
     }
     :global(.captcha) {
       transform-origin: 0 0;
+      margin: 0;
     }
     :global(.submit) {
-      position: relative;
-      bottom: 20px;
+      margin: 20px 0;
       background-color: transparent;
       border: 0;
       outline: 0;
@@ -28,7 +32,6 @@ export default css`
       user-select: none;
       text-decoration: line-through;
       cursor: not-allowed;
-      margin: 0;
     }
 
     .label {

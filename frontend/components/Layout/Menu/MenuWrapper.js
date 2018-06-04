@@ -1,13 +1,15 @@
 import { RouterContext } from '../../Context/Router';
+import dynamic from 'next/dynamic';
 
-import Desktop from './MenuDesktop';
-import Mobile from './MenuMobile';
+const Desktop = dynamic(import('./MenuDesktop'), { loading: () => null });
+const Mobile = dynamic(import('./MenuMobile'), { loading: () => null });
 
 class Menu extends React.Component {
   state = {
     reverse: false
   }
   duration = 0.75;
+  menuItems = ['Parkett', 'Treppe', 'Möbel', 'Innenausbau'];
 
   componentDidMount() {
     window.onkeydown = this.onEscape;
@@ -54,7 +56,7 @@ class Menu extends React.Component {
   }
 
   routeHandling = (req) => {
-    if(req === location.pathname.slice(1)) {
+    if(req === location.pathname.slice(1).replace(/oe/, 'ö')) {
       this.setState((prevState) => {
         if(!prevState.reverse) {
           this.animateMenuIcon('close');
@@ -72,9 +74,19 @@ class Menu extends React.Component {
 
   renderContent() {
     if(this.props.context.device === 'desktop')
-      return <Desktop routeHandling={this.routeHandling} reverse={this.state.reverse} {...this.props.context} />;
+      return <Desktop 
+        routeHandling={this.routeHandling} 
+        reverse={this.state.reverse} 
+        menuItems={this.menuItems}
+        {...this.props.context} 
+      />;
     else if(this.props.context.device === 'mobile') 
-      return <Mobile routeHandling={this.routeHandling} reverse={this.state.reverse} {...this.props.context}  />;
+      return <Mobile 
+        routeHandling={this.routeHandling} 
+        reverse={this.state.reverse} 
+        menuItems={this.menuItems}
+        {...this.props.context}  
+      />;
     return null;
   }
 

@@ -4,8 +4,8 @@ export default css`
   //-------------------------------------
 
   @import './node_modules/modularscale-sass/stylesheets/modularscale';
-  @import './frontend/styles/mixins/responsive.scss';
   @import './frontend/styles/mixins/variables.scss';
+  @import './frontend/styles/mixins/responsive.scss';
 
   //-------------------------------------
 
@@ -54,6 +54,7 @@ export default css`
   * 
   * © 2018 MyFonts Inc
   */
+
   @font-face {
     font-family: 'Didonesque-Roman';
     font-display: swap;
@@ -85,8 +86,34 @@ export default css`
     box-shadow: 0 0 0px 1000px #F3F4F7 inset;
   }
 
+  *, *::before, *::after {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    box-sizing: inherit;
+    outline: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    width: 100%;
+    overflow: hidden;
+    overflow-y: -ms-autohiding-scrollbar;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;  
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background-color: rgba(0,0,0,.99);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
   //-------------------------------------
+
   $modularscale: (
     base: 12px,
     ratio: 1.25,
@@ -104,6 +131,8 @@ export default css`
 
   body {
     font-size: ms(0);
+    width: 100%;
+    background-color: white;
   }
 
   h1, h2, h3, h4, {
@@ -151,33 +180,43 @@ export default css`
     color: inherit;
   }
 
-  // LAYOUT WRAPPER
-
-  .layout_wrapper {
-    position: absolute;
-    bottom: $layoutGAP;
-    left: $layoutGAP;
-    width: calc(100%  - (#{$layoutGAP} * 2));
-    height: calc(100%  - #{$layoutGAP});
-  }
-  //-------------------------------------
-
-  // PAGE TRANSITIONS
-  .page_transition_wrapper {
-    height: 100%;
+  .root {
     width: 100%;
     position: fixed;
     top: 0;
     left: 0;
-    transform: scaleX(0);
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .layout_wrapper {
+    position: absolute;
+    padding: $layoutGAP;
+    width: 100%;
+    height: 100%;
+  }
+  
+  //-------------------------------------
+
+  // MAIN PAGE TRANSITION
+  .page_transition_wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transform: scale(0);
+    z-index: 1000;
     background: $zwanzig-grad-rot-dunkel;
-    overflow: hidden;
+    pointer-events: none;
     .page_transition {
-      height: 100%;
-      width: 100%;
       position: absolute;
       top: 0;
-      left: 0; 
+      left: 0;
+      height: 100%;
+      width: 100%;
       background: $zwanzig-grad-rot;
     }
   }
@@ -207,6 +246,7 @@ export default css`
     background-size: cover;
     background-position: center;
     object-fit: cover;
+    user-select: none;
   }
 
   .didonesque_headline {
@@ -256,6 +296,14 @@ export default css`
     user-select: none;
     color: black;
     text-decoration: none; 
+  }
+
+  .button {
+    border: 0;
+    background-color: transparent;
+    font-family: inherit;
+    color: inherit;
+    cursor: pointer;
   }
 
   .futura_normal {
@@ -328,6 +376,7 @@ export default css`
     position: relative;
     pointer-events: none;
     // background: $lazy-background;
+    z-index: 1;
   }
 
   .lazy_image {
