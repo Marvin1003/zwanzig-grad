@@ -1,6 +1,5 @@
 import { PureComponent } from 'react';
 import dynamic from "next/dynamic";
-
 import App from '../frontend/components/App';
 
 import { RouterContext } from '../frontend/components/Context/Router';
@@ -11,20 +10,17 @@ import Link from '../frontend/components/Utility/Link';
 
 // ANIMATION
 const SnakeNSwitch = dynamic(import('../frontend/animation/components/SnakeNSwitch'), { loading: () => null });
-import TextHover from '../frontend/animation/components/hover/TextHover';
 import SVGCircle from '../frontend/animation/components/hover/SVGCircle';
 
 // FUNCTIONS
 import autoScroll from '../frontend/functions/autoScroll';
 import nextTopic from '../frontend/animation/nextTopic';
-import runOnce from '../frontend/functions/helper/runOnce';
+import runOnce from '../frontend/functions/runOnce';
 
 import images from '../static/json/homeImages.json';
 
 import style from '../frontend/styles/pages/index';
 
-/* eslint-disable */
-       
 class Home extends PureComponent {
   constructor(props) {
     super(props);
@@ -169,6 +165,13 @@ class Home extends PureComponent {
     ));
   }
   
+  routeHandler = () => {
+    if(window.innerWidth < 1024) {
+      this.props.nextRoute(this.state.currentLink);
+    } 
+  }
+
+
   renderComponent(device) {
     if(device === 'desktop') {
       return (
@@ -188,8 +191,8 @@ class Home extends PureComponent {
       <App title="Home" header="header_home" className='layout_wrapper'>      
         <style jsx>{style}</style>
         <div className="layout futura_normal">
-          <div className="topic_container"><h1 className="topic quattrocento_normal" /></div>
-          <div className="current_section side font_medium">
+          <div className="topic_container" onClick={this.routeHandler}><h1 className="topic quattrocento_normal" /></div>
+          <div className="current_section side">
             <span ref={this.current} className="sec_current" />
             /
             <span ref={this.amount} className="sec_amount" />

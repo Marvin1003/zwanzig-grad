@@ -4,6 +4,8 @@ const compression = require('compression');
 
 const sanitizeHtml = require('sanitize-html');
 
+const support = checkBrowserSupport();
+
 const fs = require('fs');
 const { join } = require('path');
 const next = require('next');
@@ -25,6 +27,10 @@ app.prepare().then(() => {
   server.get('*', (req, res) => {
     const parsedUrl = parse(req.url, true);
     const { pathname, query = {} } = parsedUrl;
+
+    support
+      ? res.set('supported', 'true')
+      : res.set('support', 'false');
 
     if (pathname === '/service-worker.js') {
       const filePath = join(__dirname, '.next', pathname);
@@ -50,3 +56,15 @@ app.prepare().then(() => {
     console.log(`> Ready on http://localhost:${PORT}`);
   });
 });
+
+
+function checkBrowserSupport() {
+  const { detect } = require('detect-browser');
+  const browser = detect();
+
+  // handle the case where we don't detect the browser
+  if(browser && ((browser.name === 'edge') || (browser.name === 'ie')))
+    return false;
+  else 
+    return true;
+}

@@ -6,9 +6,9 @@ import Button from '../frontend/animation/components/hover/ButtonHover';
 import style from '../frontend/styles/pages/moebel';
 
 export default () => (
-  <App title="Moebel" next="Innenausbau" type="topic">
+  <App title="Möbel" next="Innenausbau" type="topic">
     <style jsx>{style}</style>
-    <section className="section sec_two_moebel">
+    <section className="section sec_two_möbel">
       <Lazy
         lazy={false}
         master={2}

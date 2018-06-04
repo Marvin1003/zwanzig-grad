@@ -8,11 +8,12 @@ import style from '../frontend/styles/pages/kontakt';
 export default () => (
   <App title="Kontakt">
     <style jsx>{style}</style>
-    <div className="container">
-      <div className="wrapper">
-        <div className="futura_normal layout_wrapper">
-          <Form />
-          <address className="address font_small">
+    <div className="container futura_normal">
+      <div className="wrapper layout_wrapper">
+        <h2 className="quattrocento_normal kontakt_header">Kontakt</h2>
+        <Form />
+        <div className="address font_small">
+          <address>
             <span>zwanzig-grad / </span>
             <span>wertherstr. 310 / </span>
             <span>33619 bielefeld / </span>
@@ -20,6 +21,7 @@ export default () => (
           </address>
         </div>
       </div>
+      
       <GoogleMap />
     </div>
   </App>

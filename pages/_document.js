@@ -1,59 +1,22 @@
 import Document, { Head, Main, NextScript } from 'next/document';
 
-// CRITICIAL CSS
-const styles = `
-  *, *::before, *::after {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    box-sizing: inherit;
-    outline: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    width: 100%;
-    overflow: hidden;
-    overflow-y: -ms-autohiding-scrollbar;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;  
-    box-sizing: border-box;
-  }
-
-  ::selection {
-    background-color: rgba(0,0,0,.99);
-    color: white;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
-  body {
-    background-color: white;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: scroll;
-    -webkit-overflow-scrolling: touch;
-  }
-  .button {
-    border: 0;
-    background-color: transparent;
-    font-family: inherit;
-    color: inherit;
-    cursor: pointer;
-  }
-`;
 
 export default class MyDocument extends Document {
   render() {
     return (
       <html lang="de">
         <Head>
+          <link rel="icon" type="image/png" href="/static/images/logo/favicon-16x16.png" sizes="16x16" />  
+          <link rel="icon" type="image/png" href="/static/images/logo/favicon-32x32.png" sizes="32x32" />  
+          <link rel="icon" type="image/png" href="/static/images/logo/favicon-96x96.png" sizes="96x96" />  
+          
+          <link rel="apple-touch-icon" href="/static/images/logo/icon-120x120.png" /> 
+          <link rel="apple-touch-icon" sizes="152x152" href="/static/images/logo/icon-152x152.png" />  
+          <link rel="apple-touch-icon" sizes="167x167" href="/static/images/logo/icon-167x167.png" />  
+          <link rel="apple-touch-icon" sizes="180x180" href="/static/images/logo/icon-180x180.png" />  
+
           <link rel="manifest" href="/static/manifest/manifest.json" />
+          
           <link rel="preload" href="/static/fonts/Didonesque/Didonesque-Roman.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
           <link rel="preload" href="/static/fonts/Futura/Futura-Book.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
           <link rel="preload" href="/static/fonts/Quattrocento/Quattrocento-Bold.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
@@ -61,10 +24,9 @@ export default class MyDocument extends Document {
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
           <meta name="description" content="Handwerk zum wohnen - Professionell, Hochwertig, Zuverlässig - Seit 20 Jahren." />
-          <meta name="theme-color" content="#6D2A2A" />
-          <meta charSet="utf-8" />
+          <meta name="theme-color" content="#8e3636" />
+          <meta charSet="UTF-8" />
           <noscript>Die Seite benötigt JavaScript.</noscript>
-          <style>{styles}</style>
         </Head>
         <body>
           <Main />

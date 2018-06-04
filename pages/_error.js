@@ -1,5 +1,3 @@
-import { Fragment } from 'react';
-
 const styles = {
   wrapper: {
     position: 'fixed',
@@ -11,7 +9,7 @@ const styles = {
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   num: {
     fontSize: '24px',
@@ -25,14 +23,15 @@ const styles = {
 };
 
 export default class Error extends React.Component {
-  static getInitialProps({ res, err }) {
-    const statusCode = res ? res.statusCode : err ? err.statusCode : null;
-    return { statusCode }
+  static defaultProps = {
+    message: 'Es ist ein Fehler aufgetreten.',
+    type: 1
+
   }
 
   errorMessage() {
     this.style = `
-      ${(this.props.statusCode === 404) 
+      ${(this.props.type === 1) 
         ? " h1 { border-left: 1px solid #C1C12B; } " 
         : null}
 
@@ -46,14 +45,14 @@ export default class Error extends React.Component {
         h1 {
           border-left: 0;
         }
-        ${(this.props.statusCode === 404) 
+        ${(this.props.type === 1) 
           ? " span { border-bottom: 1px solid #C1C12B; padding: 15px 30px; } " 
           : null}
         }
       }
     `;
 
-    if(this.props.statusCode === 404) {
+    if(this.props.type === 1) {
       return (
         <div style={styles.wrapper}>
           <style>{this.style}</style>
@@ -65,15 +64,15 @@ export default class Error extends React.Component {
     return (
       <div style={styles.wrapper}>
         <style>{this.style}</style>
-        <h1 style={styles.h1}>Es ist ein Fehler aufgetreten.</h1>
+        <h1 style={styles.h1}>{this.props.message}</h1>
       </div>
     );
   }
   render() {
     return (
-      <Fragment>
+      <>
         {this.errorMessage()}
-      </Fragment>
+      </>
     )
   }
 }
