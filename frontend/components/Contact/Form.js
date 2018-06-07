@@ -87,15 +87,15 @@ export default class extends PureComponent {
   focus(item) {
     this.expanded = true;
 
-    TweenLite.to(item, this.animationDuration, { borderBottom: '1px solid black', ease: 'zwanzig-grad' });
-    TweenLite.to(item.nextSibling, this.animationDuration, { color: 'black', ease: 'zwanzig-grad' });
+    TweenLite.to(item.parentNode, this.animationDuration, { alpha: 1, ease: 'zwanzig-grad' });
     TweenLite.to(item.nextSibling, this.animationDuration, { y: '-150%', ease: 'zwanzig-grad' });
   }
 
   focusOut(item) {
     if (!item.value) {
-      TweenLite.to(item, this.animationDuration, { borderBottom: '1px solid #808080', ease: 'zwanzig-grad' });
-      TweenLite.to(item.nextSibling, this.animationDuration, { color: '#808080', ease: 'zwanzig-grad' });
+      TweenLite.to(item, this.animationDuration, { borderBottom: '1px solid black', ease: 'zwanzig-grad' });
+      TweenLite.to(item.nextSibling, this.animationDuration, { color: 'black', ease: 'zwanzig-grad' });
+      TweenLite.to(item.parentNode, this.animationDuration, { alpha: 0.7, ease: 'zwanzig-grad' });
       TweenLite.to(item.nextSibling, this.animationDuration, { y: '0%', ease: 'zwanzig-grad' });
     } else if ((this.pass) || (item.type !== 'email' && item.type !== 'tel')) {
       TweenLite.to(item, this.animationDuration, { borderBottom: '1px solid #C1C12B', ease: 'zwanzig-grad' });
@@ -130,19 +130,19 @@ export default class extends PureComponent {
     return (
       <form action="/send" method="POST" className="form didonesque_normal" ref={this.form}>
         <style jsx>{style}</style>
-        <div className="field">
-          <input type="text" name="name" className="input" required />
+        <div className="field alpha">
+          <input type="text" name="name" autoComplete='name' className="input" required />
           <label htmlFor="name" className="label">Name</label>
         </div>
-        <div className="field">
-          <input type="email" name="email" className="input" required />
+        <div className="field alpha">
+          <input type="email" name="email" autoComplete='email' className="input" required />
           <label htmlFor="email" className="label">Email Adresse</label>
         </div>
-        <div className="field">
-          <input type="tel" pattern="^(\+?([0-9]{2})?)([-.\s])?(([0-9]{3,5})([-.\s])([0-9]{3,5})?([-\.\s])([0-9]{3,5})|([0-9]{7,14}))$" name="tel" className="input" required />
+        <div className="field alpha">
+          <input type="tel" autoComplete='tel' pattern="^(\+?([0-9]{2})?)([-.\s])?(([0-9]{3,5})([-.\s])([0-9]{3,5})?([-\.\s])([0-9]{3,5})|([0-9]{7,14}))$" name="tel" className="input" required />
           <label htmlFor="name" className="label">Telefon</label>
         </div>
-        <div>
+        <div className="alpha">
           <textarea rows="1" name="nachricht" className="textarea" required />
           <label htmlFor="nachricht" className="label">Ihre Nachricht</label>
         </div>

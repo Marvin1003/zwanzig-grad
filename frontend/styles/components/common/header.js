@@ -11,6 +11,7 @@ export default css`
   // DEFAULT 
   
   .standard_nav {
+    will-change: opacity;
     width: 100vw;
     position: fixed;
     left: 0;

@@ -10,12 +10,14 @@ export default css`
   .form {
     width: 100%;
     position: relative;
-    // top: 50%;
-    // transform: translateY(-50%);
     .field {
       position: relative;
       margin-bottom: 40px;
       transition: margin-bottom ease-out 1s;
+    }
+    .alpha {
+      opacity: 0.7;
+      will-change: opacity;
     }
     :global(.captcha) {
       transform-origin: 0 0;
@@ -37,8 +39,8 @@ export default css`
     .label {
       position: absolute;
       left: 0;
-      color: #808080;
       z-index: -1;
+      will-change: transform;
     }
     
     .textarea {

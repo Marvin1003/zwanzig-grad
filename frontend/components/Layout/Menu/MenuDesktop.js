@@ -5,13 +5,11 @@ import TextHover from '../../../animation/components/hover/TextHover';
 import style from '../../../styles/components/desktop/menuDesktop';
 
 class Menu extends React.Component {
-  constructor(props) { 
+  constructor(props) {
     super(props);
-
-    this.list = React.createRef();
-
     this.tl = new TimelineLite({ onComplete: this.startDragger, onReverseComplete: () => this.props.toggleMenu('button')});
   }
+  list = React.createRef();
 
   componentDidMount() {
     // NO NEED TO BE OO - JUST USE FUNCTIONAL PROGRAMMING THERE
@@ -57,7 +55,7 @@ class Menu extends React.Component {
       return (
         <li key={elem} onClick={() => this.props.routeHandling(link)}>
           <a className="topic_link_menu">
-            <img src={`static/images/${link}/5${this.props.mime}`} alt={`${link} Bild`} />
+            <img src={`static/images/${link.replace(/ö/,'oe')}/5${this.props.mime}`} alt={`${link} Bild`} />
             <div className="quattrocento quattrocento_normal"><h1 className="stagger_item">{elem}</h1></div>
           </a>
         </li>

@@ -51,16 +51,13 @@ export default class ButtonHover extends PureComponent {
         transform: 'scaleX(0)'
       }
     };
-  }
 
-  componentWillMount() {
-    const domPreperation = Array.from(this.props.name, (character, i) => (
+    this.domPreperation = Array.from(this.props.name, (character, i) => (
       <span key={i} style={this.style.wrapperStyle} className="spanWrapper">
         <span className="move" style={{ display: 'inline-block' }}>{character}</span>
         <span className="move" style={{ display: 'inline-block' }}>{character}</span>
        </span>
       ));
-    this.setState({ domPreperation });
   }
 
   componentDidMount() {
@@ -126,7 +123,7 @@ export default class ButtonHover extends PureComponent {
           onMouseEnter={hoverIn.bind(this, 'mouse')}
           onMouseLeave={hoverOut.bind(this, 'mouse')}
         >
-          {this.state.domPreperation}
+          {this.domPreperation}
           <div ref={this.bgbox} style={this.style.div} />
         </a>
       </Link>

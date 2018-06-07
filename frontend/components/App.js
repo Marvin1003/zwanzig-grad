@@ -5,6 +5,8 @@ import Menu from './Layout/Menu/MenuWrapper';
 import Header from './Layout/Header/Header';
 import SecOne from './Sections/SecOne';
 import SecNext from './Sections/SecNext';
+import mobileHeight from '../functions/mobileHeight';
+
 
 const Topic = (props) => (
   <div className="parallax">
@@ -20,6 +22,7 @@ class App extends React.Component {
   }
   
   componentDidMount() {
+    mobileHeight();
     if(!window.APP) {
       window.APP = {
         nextSection: 0,

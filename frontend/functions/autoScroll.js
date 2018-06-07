@@ -10,13 +10,14 @@ export default function autoScroller() {
   const minSwipe = 30;
   const wheelData = [];
 
-  Router.onRouteChangeStart = (url) => {
-    window.removeEventListener('wheel', preventScrolling, { capture: true });
-    window.removeEventListener('wheel', autoScroll);
+  Router.onRouteChangeStart = () => {
+    window.removeEventListener('wheel', preventScrolling, false);
+    window.removeEventListener('wheel', autoScroll, false);
     window.removeEventListener('touchstart', touchSafeScroll, { passive: true });
     window.removeEventListener('touchmove', toggleActiveTouch, { passive: false });
     window.removeEventListener('touchend', autoScroll, { passive: true });
-    window.removeEventListener('keyup', handleArrowNavigation);
+    window.removeEventListener('keyup', handleArrowNavigation, false);
+    window.removeEventListener('load', startInteractive, false);
     Router.onRouteChangeStart = null;
   }
     
@@ -25,18 +26,18 @@ export default function autoScroller() {
   // WAIT UNTIL PICTURES ARE LOADED
   document.readyState === 'complete'
     ? startInteractive()
-    : window.addEventListener('load', startInteractive)
+    : window.addEventListener('load', startInteractive, false);
     
   /* FUNCTIONS */
   
   function startInteractive() {
     buttons();
-    window.addEventListener('wheel', preventScrolling, { capture: true });
-    window.addEventListener('wheel', autoScroll);
+    window.addEventListener('wheel', preventScrolling, false);
+    window.addEventListener('wheel', autoScroll, false);
     window.addEventListener('touchstart', touchSafeScroll, { passive: true });
     window.addEventListener('touchmove', toggleActiveTouch, { passive: false });
     window.addEventListener('touchend', autoScroll, { passive: true });
-    window.addEventListener('keyup', handleArrowNavigation);
+    window.addEventListener('keyup', handleArrowNavigation, false);
   }
 
 
@@ -58,12 +59,11 @@ export default function autoScroller() {
       nextTouch = e.changedTouches[0];
 
     if(!window.APP.autoScrolling) {
-      switch (e.type) {
-        case 'wheel':
+      if(e.type === 'wheel') {
           // averageScrollStrength idea not by me - i had a different approach. This one is more reliable.
           const nextStrength = averageScrollStrength(wheelData, 20);
           const prevStrength = averageScrollStrength(wheelData, 70);
-          const allowScrolling = nextStrength > prevStrength;
+          var allowScrolling = nextStrength > prevStrength;
           if (allowScrolling) {
             if (scrollSpeed < 0)
               direction = 'up';
@@ -72,9 +72,8 @@ export default function autoScroller() {
 
             initiateAnimation(false, direction);
           }
-          break;
-  
-        case 'touchend':
+        }
+        else if(e.type === 'touchend') {
           const xDiff = Math.abs(nextTouch.pageX - prevTouch.pageX);
           const yDiff = Math.abs(nextTouch.pageY - prevTouch.pageY);
 
@@ -91,16 +90,10 @@ export default function autoScroller() {
               else if (nextTouch.pageX < prevTouch.pageX)
                 direction = 'down';
             }
-
-            if(activeTouch)
-              initiateAnimation(false, direction);
           }
+          (activeTouch || allowScrolling) && initiateAnimation(false, direction);
 
           activeTouch = false;
-          break;
-
-        default:
-          console.log('Event not supported');
       }
     }
   }
@@ -148,7 +141,6 @@ export default function autoScroller() {
     return Math.ceil(sum / number);
   }
 
-
   function buttons() {
     const next = document.getElementsByClassName('next')[0];
     const prev = document.getElementsByClassName('prev')[0];
@@ -156,8 +148,6 @@ export default function autoScroller() {
     next.addEventListener('click', () => initiateAnimation(false, 'down'));
     prev.addEventListener('click', () => initiateAnimation(false, 'up'));
   }
-
-  /* ----------------------------------------------- */
 }
 
 

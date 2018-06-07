@@ -1,4 +1,6 @@
 import { RouterContext } from '../../Context/Router';
+import { DeviceContext } from '../../Context/Device';
+
 import dynamic from 'next/dynamic';
 
 const Desktop = dynamic(import('./MenuDesktop'), { loading: () => null });
@@ -111,6 +113,10 @@ class Menu extends React.Component {
 
 export default (props) => (
   <RouterContext.Consumer>
-    {(nextRoute) => <Menu {...props} context={nextRoute} />}
+    {(nextRoute) => (
+      <DeviceContext>
+        {(target) => <Menu {...props} context={Object.assign({}, nextRoute, target)} /> }
+      </DeviceContext>
+    )}
   </RouterContext.Consumer>
 )

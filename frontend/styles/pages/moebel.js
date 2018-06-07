@@ -37,7 +37,6 @@ export default css`
       }
     }
     :global([data-name="lazy"]) {
-      overflow: hidden;
       @include responsive("tablet-wide", min){
         @include parallax(-2);
         @include calcDistance(bottom, 0vh, -2);

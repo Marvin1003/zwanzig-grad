@@ -25,7 +25,10 @@ export default css`
         height: 100% !important;
         width: 50%;
       }
-      @include responsive('tablet-wide', max) {
+      @include responsive('phone-wide', min) {
+        min-height: 600px;
+      }
+      @include responsive('phone-wide', max) {
         min-height: 525px;
         height: 50%;
         width: 100%;
@@ -37,21 +40,25 @@ export default css`
       justify-content: center;
       @include responsive('tablet-wide', min) {
         padding-top: 0;
+        min-height: 700px;
       }
       padding-bottom: 0;
     }
-    & > :global(div:last-of-type) {
-      overflow: hidden;
-      @include responsive('tablet-wide', min) {
-        height: 100% !important;
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 50%;
-      }
-      @include responsive('tablet-wide', max) {
-        position: relative;
-        width: 100%;
+    .map_root {
+      position: relative;
+      :global(.map_wrapper) {
+        overflow: hidden;
+        height: 100%;
+        @include responsive('tablet-wide', min) {
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 50%;
+        }
+        @include responsive('tablet-wide', max) {
+          position: relative;
+          width: 100%;
+        }
       }
     }
   }
@@ -78,6 +85,7 @@ export default css`
       text-align: center;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
     @include responsive('tablet-wide', min) {
       position: absolute;

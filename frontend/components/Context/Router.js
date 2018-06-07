@@ -1,36 +1,23 @@
+import { Component } from 'react';
 import Router from 'next/router';
 import nextData from '../../../static/json/nextTransitionData.json';
-import Dynamic from 'next/dynamic';
 // RESTUCTURE AND TRY TO SPLIT IN MULTIPLE INDEPENDENT CONTEXTS!
 
 export const RouterContext = React.createContext();
 
-export class RouterProvider extends React.Component {
-  constructor(props) {
+export class RouterProvider extends Component {
+  constructor(props) {
     super(props);
-    
     this.state = {
-      device: null,
       menu: false,
       nextRoute: this.nextRoute,
       toggleMenu: this.toggleMenu,
       setMountState: this.setMountState
     }
-
-    this.req = null;
-    this.allowTransition = true;
   }
 
-  componentDidMount() {
-    this.target();
-    window.addEventListener('resize', this.target);
-  }
-
-  componentDidUpdate() {
-    if(this.state.pageMounted && this.state.transitionReady && !this.allowTransition) {
-      this.fadeOut();
-    }
-  }
+  req = null;
+  allowTransition = true;
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.target);
@@ -45,41 +32,28 @@ export class RouterProvider extends React.Component {
     }
   }
 
+  checkFadeOut() {
+    if(this.state.pageMounted && this.state.transitionReady && !this.allowTransition) {
+      this.fadeOut();
+    }
+  }
+
   setMountState = (bool) => {
     // MOUNT STATE
     this.setState((prevState) => {
       if(prevState.pageMounted !== bool) {
         return { pageMounted: bool }
       }
-    })
-  }
-  
-  target = () => {
-    this.device = window.innerWidth < 1025 ? 'mobile' : 'desktop';
-    
-    this.setState((prevState) => {
-      if (prevState.device !== this.device) {
-        // DISABLE TOUCH IF MENU IS OPEN AND MOBILE DEVICE -- ONLY NECESSARY FOR RESIZING WHILE MENU OPEN 
-        this.device === 'mobile' && this.state.menu
-          ? window.addEventListener('touchmove', this.preventEvent, { passive: false })
-          : window.removeEventListener('touchmove', this.preventEvent, { passive: false });
-
-        return {
-          device: this.device
-        }
-      }
-      return null;
-    });
+    }, this.checkFadeOut);
   }
 
   toggleMenu = (req) => { 
     window.APP.menu = !this.state.menu;
-    
     if(req === 'button') {
       this.setState((prevState) => ({ menu: !prevState.menu }));
 
       // DISABLE TOUCH IF MENU IS OPEN AND MOBILE DEVICE
-      if(window.APP.menu && this.state.device === 'mobile') {
+      if(window.APP.menu && window.innerWidth <= 1024) {
         window.addEventListener('touchmove', this.preventEvent, { passive: false });
         window.addEventListener('wheel', this.preventEvent, { passive: false })
         
@@ -111,7 +85,7 @@ export class RouterProvider extends React.Component {
           return { menu: false }
       });
         Router.push(`/${next}`);
-        this.setState({ transitionReady: true })
+        this.setState({ transitionReady: true }, this.checkFadeOut);
     }
     if(this.allowTransition) {
       this.allowTransition = false;

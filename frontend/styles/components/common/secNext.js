@@ -25,6 +25,7 @@ export default css`
       margin-top: 50px;
     }
     .sec_next_background {
+      will-change: left, top;
       height: 100%;
       width: 100%;
       position: absolute;

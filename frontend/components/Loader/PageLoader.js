@@ -57,10 +57,11 @@ export default class extends React.Component {
     lastTL
       .staggerTo(target, this.duration[0], { opacity: 0, x: -this.distance }, this.cookieMessageStaggerDelay)
       .to(this.loader.current, this.duration[1], { scaleX: 0, ease: 'zwanzig-grad'}, this.duration[0])
-      .to(this.loader.current.parentNode, this.duration[1], { scaleX: 0, onComplete: this.props.removeMe, ease: 'zwanzig-grad' }, this.duration[0] + 0.1);
-
+      .to(this.loader.current.parentNode, this.duration[1], { scaleX: 0, onComplete: this.props.removeMe, ease: 'zwanzig-grad' }, this.duration[0] + 0.1)
+      
     if(targetSection) {
-      lastTL.fromTo(targetSection, this.duration[1], 
+      lastTL
+        .fromTo(targetSection, this.duration[1], 
         { alpha: 1, xPercent: 50, visibility: 'visible' }, 
         { xPercent: 0, ease: 'zwanzig-grad' }, this.duration[0] + 0.1);
     }

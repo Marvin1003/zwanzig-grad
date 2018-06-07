@@ -182,7 +182,7 @@ export default css`
 
   .root {
     width: 100%;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -252,7 +252,8 @@ export default css`
   .didonesque_headline {
     @extend .didonesque_normal;
     color: black;
-    margin: 25px 0;
+    // 20px on BOTTOM dude to line-height of <p>
+    margin: 25px 0 20px 0;
   }
 
   .quattrocento_headline { 
@@ -377,6 +378,9 @@ export default css`
     pointer-events: none;
     // background: $lazy-background;
     z-index: 1;
+    div {
+      will-change: transform;
+    }
   }
 
   .lazy_image {

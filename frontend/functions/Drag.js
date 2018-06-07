@@ -50,102 +50,129 @@ export default class DragAnimation {
     TweenLite.set(document.body, { cursor: '-webkit-grab' });
   }
 
+  errorHandling() {
+    TweenLite.set('*', { clearProps: 'cursor' });
+    // REMOVE DRAGER EVENT HANDLER
+    window.onmouseup = null;
+    window.onmousedown = null;
+    window.onmousemove = null;
+    window.onwheel = null;
+    window.oncontextmenu = null;
+  }
+
   contextmenu(e) {
     e.preventDefault();
   }
 
   changeScrollDirection(e) {
-    e.preventDefault();
     try {
-      var scrollWidth = this.elem.scrollWidth - window.innerWidth;
-    } catch(e) { return; }
+      e.preventDefault();
+      try {
+        var scrollWidth = this.elem.scrollWidth - window.innerWidth;
+      } catch(e) { return; }
 
-    if (this.scrollTo < 0)
-      this.scrollTo = 0;
-    else if (this.scrollTo > scrollWidth)
-      this.scrollTo = scrollWidth;
-    else
-      this.scrollTo = ((e.deltaY + e.deltaX) * this.scrollStrength) + this.elem.scrollLeft;
+      if (this.scrollTo < 0)
+        this.scrollTo = 0;
+      else if (this.scrollTo > scrollWidth)
+        this.scrollTo = scrollWidth;
+      else
+        this.scrollTo = ((e.deltaY + e.deltaX) * this.scrollStrength) + this.elem.scrollLeft;
 
-    TweenLite.to(this.elem, 0.1, { scrollTo: { x: this.scrollTo, y: 0 }, ease: Power4.easeOut });
+      TweenLite.to(this.elem, 0.1, { scrollTo: { x: this.scrollTo, y: 0 }, ease: Power4.easeOut });
+    } catch(e) {
+      this.errorHandling();
+    }
   }
 
   mouseDown(e) {
-    // ADD MOUSEMOVE EVENT HANDLER
-    window.onmousemove = this.mouseMove;
+    try {
+      // ADD MOUSEMOVE EVENT HANDLER
+      window.onmousemove = this.mouseMove;
 
-    // SET CURSOR OF CONTAINER
-    TweenLite.set(document.body, { cursor: '-webkit-grabbing' });
+      // SET CURSOR OF CONTAINER
+      TweenLite.set(document.body, { cursor: '-webkit-grabbing' });
 
-    // CURRENT POSITION
-    this.coordinates.startX = e.clientX;
+      // CURRENT POSITION
+      this.coordinates.startX = e.clientX;
 
-    // CURRENT SCROLL POSITIOJN
-    this.distances.currentEaseX = this.elem.scrollLeft;
+      // CURRENT SCROLL POSITIOJN
+      this.distances.currentEaseX = this.elem.scrollLeft;
 
-    if (this.tween)
-      this.tween.pause();
+      if (this.tween)
+        this.tween.pause();
+    } catch(e) {
+      this.errorHandling();
+    }
   }
 
   mouseUp() {
-    // HANDLE EVENT LISTENER
-    window.onmousedown = this.mouseDown;
-    window.onmousemove = null;
+    try {
+      // HANDLE EVENT LISTENER
+      window.onmousedown = this.mouseDown;
+      window.onmousemove = null;
 
-    // SET CURSOR
-    TweenLite.set(document.body, { cursor: '-webkit-grab' });
+      // SET CURSOR
+      TweenLite.set(document.body, { cursor: '-webkit-grab' });
 
-    // PERFORMANTER MACHEN BEI LANGEWEILE !!!
-    TweenLite.set(this.elem.parentNode, { clearProps: 'pointerEvents' });
+      // PERFORMANTER MACHEN BEI LANGEWEILE !!!
+      TweenLite.set(this.elem.parentNode, { clearProps: 'pointerEvents' });
 
-    // ANIMATE TO
-    if (this.checks.isMoving && !this.checks.interrupt) {
-      this.distance = this.coordinates.endX - this.coordinates.startX;
+      // ANIMATE TO
+      if (this.checks.isMoving && !this.checks.interrupt) {
+        this.distance = this.coordinates.endX - this.coordinates.startX;
 
-      // CALCULATE POSITION TO EASE TO
-      this.distances.calcEase = (this.distances.difference - ((this.distance / this.strength) * (this.width / 1000)));
-        
-      // if(this.distances.calcEase > (this.elem.scrollWidth - w))
-      //   this.distances.calcEase = (this.elem.scrollWidth - w);
+        // CALCULATE POSITION TO EASE TO
+        this.distances.calcEase = (this.distances.difference - ((this.distance / this.strength) * (this.width / 1000)));
+          
+        // if(this.distances.calcEase > (this.elem.scrollWidth - w))
+        //   this.distances.calcEase = (this.elem.scrollWidth - w);
 
-      // CALCULATE ANIMATIONDURATION
-      this.animationDuration = (this.duration / (Math.abs(this.distance)) / 2).toFixed(2);
+        // CALCULATE ANIMATIONDURATION
+        this.animationDuration = (this.duration / (Math.abs(this.distance)) / 2).toFixed(2);
 
-      if (this.animationDuration < 0.5)
-        this.animationDuration = 0.5;
-      else if (this.animationDuration > 2)
-        this.animationDuration = 2;
+        if (this.animationDuration < 0.5)
+          this.animationDuration = 0.5;
+        else if (this.animationDuration > 2)
+          this.animationDuration = 2;
 
-        this.tween = TweenLite.to(this.elem, this.animationDuration, { scrollTo: { x: this.distances.calcEase }, ease: this.ease });
+          this.tween = TweenLite.to(this.elem, this.animationDuration, { scrollTo: { x: this.distances.calcEase }, ease: this.ease });
 
-      this.checks.isMoving = false;
+        this.checks.isMoving = false;
+      }
+    } catch(e) {
+      this.errorHandling();
     }
   }
 
   mouseMove(e) {
-    // HANDLE EVENT LISTENER
-    window.onmousedown = null;
+    try {
+      // HANDLE EVENT LISTENER
+      window.onmousedown = null;
 
-    // SET CURSOR
-    TweenLite.set(document.body, { cursor: '-webkit-grabbing' });
+      // SET CURSOR
+      TweenLite.set(document.body, { cursor: '-webkit-grabbing' });
 
-    TweenLite.set(this.elem.parentNode, { pointerEvents: 'none' });
+      TweenLite.set(this.elem.parentNode, { pointerEvents: 'none' });
 
-    // CURRENT POSITION
-    this.coordinates.endX = e.clientX;
+      // CURRENT POSITION
+      this.coordinates.endX = e.clientX;
 
-    // CALCULATE DIFFERENCE
-    this.distances.difference = this.distances.currentEaseX - (this.coordinates.endX - this.coordinates.startX);
-    // CHECK IF NOT MOVING
-    if (Math.abs(this.coordinates.endX - this.coordinates.previousX) < this.interruptSpace && this.coordinates.endX > 0)
-      this.checks.interrupt = true;
-    else
-      this.checks.interrupt = false;
+      // CALCULATE DIFFERENCE
+      this.distances.difference = this.distances.currentEaseX - (this.coordinates.endX - this.coordinates.startX);
+      // CHECK IF NOT MOVING
+      if (Math.abs(this.coordinates.endX - this.coordinates.previousX) < this.interruptSpace && this.coordinates.endX > 0)
+        this.checks.interrupt = true;
+      else
+        this.checks.interrupt = false;
 
-    TweenLite.to(this.elem, 0.35, { scrollTo: { x: this.distances.difference }, ease: this.ease });
+      TweenLite.to(this.elem, 0.35, { scrollTo: { x: this.distances.difference }, ease: this.ease });
 
-    this.checks.isMoving = true;
-    this.coordinates.previousX = e.clientX;
+      this.checks.isMoving = true;
+      this.coordinates.previousX = e.clientX;
+    }
+    catch(e) {
+      this.errorHandling();
+    }
   }
 }
 

@@ -2,9 +2,7 @@
 export const WebPContext = React.createContext();
 
 export class WebPProvider extends React.Component {
-  state = {
-    mime: undefined
-  }
+  state = { mime: undefined }
 
   componentDidMount() {
     const image = 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA';

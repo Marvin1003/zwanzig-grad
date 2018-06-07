@@ -12,20 +12,14 @@ class SecNext extends React.Component {
     this.hovering = false;
     this.clicked = false;
     this.ready = true;
-    this.next = this.props.next.toLowerCase();
+    this.next = this.props.next.toLowerCase().replace(/ö/,'oe');
   }
 
   componentDidMount() {
     this.alternativeElem = document.getElementsByClassName('parallax')[0];
     this.tween = TweenLite.to('.sec_next_wrapper', this.duration, { height: '50%', top: '50%', ease: 'zwanzig-grad', paused: true, onComplete: this.handleCompleteSec });
-
-    this.setHeight();
-    window.addEventListener('resize', this.setHeight);
   }
 
-  setHeight() {
-    TweenLite.set('.sec_next', { height: window.innerHeight });
-  }
 
   componentWillUnmount() {
     this.removeListener();
@@ -41,7 +35,6 @@ class SecNext extends React.Component {
 
   removeListener() {
     window.removeEventListener("wheel", this.preventEvent);
-    window.removeEventListener('resize', this.setHeight);
     this.alternativeElem.removeEventListener("wheel", this.preventEvent);
     this.alternativeElem.removeEventListener("touchmove", this.preventEvent);
   }
@@ -115,7 +108,7 @@ class SecNext extends React.Component {
 
   render() {
     return (
-      <section className="section sec_next">
+      <section className="section sec_next mobile_height" data-size={1}>
         <style jsx>{style}</style>
         <div className="sec_next_wrapper">
           <div onClick={this.animate} onMouseEnter={this.hoverPlay} onMouseLeave={this.hoverReverse}className="sec_next_topic"><h1 className="quattrocento_normal">{this.props.next}</h1></div>

@@ -29,6 +29,8 @@ export default css`
 
     .impressum {
       position: absolute;
+      left: $layoutGAP;
+      bottom: $layoutGAP;
       text-transform: lowercase;
     }
 

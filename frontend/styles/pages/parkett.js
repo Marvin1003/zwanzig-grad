@@ -100,8 +100,8 @@ export default css`
       @include responsive("tablet-wide", max){
         width: 50%;
         left: 10%;
-        margin-top: calc(10vw + 150px);
         margin-left: 0;
+        margin-top: -60vh;
         text-align: center;
         p{
           hyphens: auto;
@@ -116,7 +116,7 @@ export default css`
     }
     .sec_four_box{
       background: $zwanzig-grad-rot;
-      position: absolute;
+      position: relative;
       @include responsive("tablet-wide", min){
         @include parallax(-2);
         @include calcDistance(left, 15%, -2);
@@ -124,11 +124,13 @@ export default css`
         height: 80vh;
         width: 33.33%;
         bottom: 60vh;
+        top: 150vh;
       }
       @include responsive("tablet-wide", max){
         height: 70vh;
         width: 50%;
-        top: 125px;
+        top: 0;
+        margin-top: 25px;
       }
     }
     :global([data-name="lazy"]) {
@@ -148,7 +150,7 @@ export default css`
         width: 90%;
         left: 10%;
         margin-left: 0;
-        top: calc(10vw + 125px);
+        top: calc(-70vh + 50px);
       }
       @include responsive("phone-wide", max){
         left: 50px;

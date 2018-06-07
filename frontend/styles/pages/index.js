@@ -30,6 +30,9 @@ export default css`
     }
     .topic {
       text-transform: capitalize;
+      @include responsive('tablet-wide', max) {
+        cursor: pointer;
+      }
       @include responsive('phone-wide', max) {
         hyphens: auto;
       }

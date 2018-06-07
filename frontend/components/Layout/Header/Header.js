@@ -1,4 +1,6 @@
 import { RouterContext } from '../../Context/Router';
+import { DeviceContext } from '../../Context/Device';
+
 
 import Link from '../../Utility/Link';
 import style from '../../../styles/components/common/header';
@@ -34,15 +36,19 @@ class Header extends React.Component {
     window.addEventListener('resize', this.setAlternativeElem);
 
     document.body.addEventListener("scroll", this.animateHeader);
+
+    try {
+      this.alternativeElem.addEventListener("scroll", this.animateHeader);
+    } catch(e) {}
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.setScrollHeight);
     window.removeEventListener('resize', this.setAlternativeElem);
     
-    document.body.removeEventListener("scroll", this.animateHeader)
+    document.body.removeEventListener("scroll", this.animateHeader);
     try {
-      this.alternativeElem.removeEventListener("scroll", this.animateHeader)
+      this.alternativeElem.removeEventListener("scroll", this.animateHeader);
     } catch(e) {}
   }
 
@@ -56,6 +62,7 @@ class Header extends React.Component {
     if(this.device !== this.props.device) {
       this.alternativeElem.removeEventListener("scroll", this.animateHeader);
       this.alternativeElem.addEventListener("scroll", this.animateHeader);
+      this.tween.reverse();
     }
     this.device = this.props.device;
   }
@@ -108,6 +115,10 @@ class Header extends React.Component {
 
 export default (props) => (
   <RouterContext.Consumer>
-    {(nextRoute) => <Header {...props} {...nextRoute} />}
+    {(nextRoute) => (
+      <DeviceContext.Consumer>
+        {(target) => <Header {...props} {...nextRoute} {...target} />}
+      </DeviceContext.Consumer>
+    )}
   </RouterContext.Consumer>
 );
