@@ -1,3 +1,4 @@
 .next/
 *.log 
 .DS_Store
+backend/
