@@ -21,6 +21,7 @@ export default css`
     }
 
     .info {
+      text-align: left;
       color: rgba(0,0,0,0.5);
       max-width: 250px;
       display: flex;

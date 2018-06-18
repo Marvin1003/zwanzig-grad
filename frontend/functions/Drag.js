@@ -4,9 +4,11 @@ export default class DragAnimation {
     this.topics = document.querySelectorAll('a');
     this.headlines = document.querySelectorAll(headlines);
 
-    this.scrollStrength = 0.35;
+    this.ease = ease;
     this.strength = strength;
     this.duration = duration;
+
+    this.scrollStrength = 0.35;
     this.width = window.innerWidth;
 
     this.coordinates = {

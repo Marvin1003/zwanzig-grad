@@ -211,6 +211,9 @@ export default css`
     z-index: 1000;
     pointer-events: none;
     background-color: $zwanzig-grad-rot-dunkel;
+    
+    // TEMP FIX
+    border: 1px solid transparent;
     .page_transition {
       position: absolute;
       top: 0;
