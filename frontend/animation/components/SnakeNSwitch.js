@@ -164,7 +164,6 @@ export default class SnakeNSwitch extends React.Component {
     for (let i = 0; i < this.data.images[window.APP.nextSection].length; i++) {
 
       const [x, y] = this.getPositions(clientX, clientY, i);
-      console.log(x, y);
 
       this.data.mouse = [clientX, clientY];
       TweenLite.to(this.ref.images[i], i *  0.2, { x, y, xPercent: -50, yPercent: -50, ease: 'Power1.easeOut', delay: i * 0.0005 });      
