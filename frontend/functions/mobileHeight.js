@@ -3,13 +3,14 @@ export default function mobileHeight() {
   setHeight();
 
   function setHeight() {
-    if(window.innerWidth <= 1024) {
-      const height = window.innerHeight;
-      const elements = [...document.getElementsByClassName("mobile_height")];
-      elements.forEach((element) => {
-        const size = element.getAttribute('data-size') || 1;
-        TweenLite.set(element, { height: height * size, top: (1 - size) * height });
-      });
-    }
+    const height = window.innerHeight;
+    const elements = [...document.getElementsByClassName("mobile_height")];
+    elements.forEach((element) => {
+      const size = parseInt(element.getAttribute('data-size')) || 1;
+      const top = size !== 1 ? (1 - size) * height : null;
+
+      TweenLite.set(element, { height: height * size });
+      top && TweenLite.set(element, { top });
+    });
   }
 }

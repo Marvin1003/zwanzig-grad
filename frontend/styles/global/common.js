@@ -209,15 +209,38 @@ export default css`
     width: 100%;
     transform: scale(0);
     z-index: 1000;
-    background: $zwanzig-grad-rot-dunkel;
     pointer-events: none;
+    background-color: $zwanzig-grad-rot-dunkel;
     .page_transition {
       position: absolute;
       top: 0;
       left: 0;
       height: 100%;
       width: 100%;
-      background: $zwanzig-grad-rot;
+      background-color: $zwanzig-grad-rot;
+    }
+
+    &.page_transition_initial {
+      transform: scale(1);
+      transform-origin: 0 0;
+      .page_transition {
+        transform-origin: inherit;
+        color: white;
+      }
+      .zwanzig-grad {
+        font-size: 20px;
+        text-transform: lowercase;
+        letter-spacing: 1.5px;
+        display: inline-block;
+        visibility: hidden;
+        user-select: none;
+        max-width: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: normal;
+      }
     }
   }
 

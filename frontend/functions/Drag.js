@@ -130,12 +130,9 @@ export default class DragAnimation {
         // CALCULATE ANIMATIONDURATION
         this.animationDuration = (this.duration / (Math.abs(this.distance)) / 2).toFixed(2);
 
-        if (this.animationDuration < 0.5)
-          this.animationDuration = 0.5;
-        else if (this.animationDuration > 2)
-          this.animationDuration = 2;
+        this.animationDuration = Math.max(0.5, Math.min(this.animationDuration, 2));
 
-          this.tween = TweenLite.to(this.elem, this.animationDuration, { scrollTo: { x: this.distances.calcEase }, ease: this.ease });
+        this.tween = TweenLite.to(this.elem, this.animationDuration, { scrollTo: { x: this.distances.calcEase }, ease: this.ease });
 
         this.checks.isMoving = false;
       }
