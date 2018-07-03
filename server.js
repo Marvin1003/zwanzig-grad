@@ -57,7 +57,6 @@ app.prepare().then(() => {
   });
 });
 
-
 function checkBrowserSupport() {
   const { detect } = require('detect-browser');
   const browser = detect();
