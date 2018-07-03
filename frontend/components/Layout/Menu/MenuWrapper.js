@@ -10,6 +10,7 @@ class Menu extends React.Component {
   state = {
     reverse: false
   }
+
   duration = 0.75;
   menuItems = ['Parkett', 'Treppe', 'Möbel', 'Innenausbau'];
 

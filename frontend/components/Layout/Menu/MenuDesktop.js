@@ -7,13 +7,15 @@ import style from '../../../styles/components/desktop/menuDesktop';
 class Menu extends React.Component {
   constructor(props) {
     super(props);
+
+    this.list = React.createRef();
     this.tl = new TimelineLite({ onComplete: this.startDragger, onReverseComplete: () => this.props.toggleMenu('button')});
   }
-  list = React.createRef();
 
   componentDidMount() {
     // NO NEED TO BE OO - JUST USE FUNCTIONAL PROGRAMMING THERE
     document.getElementsByClassName("dragger")[0].click();
+
     this.tl
       .fromTo('.background_animation_mobile', 0.75, 
         { scaleY: 0 }, { scaleY: 1, ease: 'zwanzig-grad' })
@@ -30,10 +32,11 @@ class Menu extends React.Component {
     window.onmousemove = null;
     window.onwheel = null;
     window.oncontextmenu = null;
+    this.tl.kill();
   }
 
   componentDidUpdate(prevProps) {
-    this.toggleAnimation(prevProps)
+    this.toggleAnimation(prevProps);
   }
 
   toggleAnimation = (prevProps) => {

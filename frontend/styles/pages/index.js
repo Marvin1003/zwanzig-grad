@@ -21,11 +21,12 @@ export default css`
     overflow: hidden;
     user-select: none;
     top: 50%;
-    transform: translate(-50%, -50%);
     @include responsive('tablet-wide', max) {
+      transform: translate(-50%, -50%);
       left: 50%;
     }
     @include responsive('tablet-wide', min) {
+      transform: translateY(-50%);
       left: 33.33%;
     }
     .topic {

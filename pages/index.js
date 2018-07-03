@@ -1,10 +1,11 @@
-import { PureComponent } from 'react';
 import dynamic from "next/dynamic";
+
+import { PureComponent } from 'react';
 import App from '../frontend/components/App';
 
 import { RouterContext } from '../frontend/components/Context/Router';
 import { WebPContext } from '../frontend/components/Context/WebP';
-
+import { DeviceContext } from '../frontend/components/Context/Device';
 
 import Link from '../frontend/components/Utility/Link';
 
@@ -24,7 +25,6 @@ import style from '../frontend/styles/pages/index';
 class Home extends PureComponent {
   constructor(props) {
     super(props);
-
     this.state = { currentLink: null }
     // REFS
     this.container = React.createRef();
@@ -42,11 +42,9 @@ class Home extends PureComponent {
     }
 
     this.initialTextAnimation = runOnce(this.initialTextAnimation);
-    
-    this.alreadyCleared = false;
-
-    this.pointer = null;
     this.autoScroll = runOnce(autoScroll);
+    
+    this.pointer = null;
   }
 
   componentDidMount() {
@@ -166,11 +164,10 @@ class Home extends PureComponent {
   }
   
   routeHandler = () => {
-    if(window.innerWidth < 1024) {
+    if(window.innerWidth <= 1024) {
       this.props.nextRoute(this.state.currentLink);
     } 
   }
-
 
   renderComponent(device) {
     if(device === 'desktop') {
@@ -202,7 +199,7 @@ class Home extends PureComponent {
             <SVGCircle hover={true} className="next svg_hover pointer" />
           </div>
           {/* <Link className="left links" href="">werte</Link> */}
-          <a className="left links pointer font_medium">werte</a>
+          <a className="left links pointer font_medium">team</a>
           <Link className="right links pointer font_medium" href="kontakt">kontakt</Link>
         </div>
         <div className="home_container">
@@ -231,7 +228,11 @@ export default (props) => (
   <RouterContext.Consumer> 
     {(nextRoute) => (
       <WebPContext.Consumer>
-        {(mime) => <Home {...props} {...nextRoute} {...mime} />}
+        {(mime) => (
+          <DeviceContext.Consumer>
+            {(target) => <Home {...props} {...nextRoute} {...mime} {...target} /> }
+          </DeviceContext.Consumer>
+        )}
       </WebPContext.Consumer>
     )}
   </RouterContext.Consumer>

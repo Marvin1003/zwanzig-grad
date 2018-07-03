@@ -46,6 +46,9 @@ export default css`
     }
     .map_root {
       position: relative;
+      @include responsive('tablet-wide', min) {
+        height: auto !important;
+      }
       :global(.map_wrapper) {
         overflow: hidden;
         height: 100%;

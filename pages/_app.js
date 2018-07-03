@@ -4,8 +4,11 @@ import Error from './_error';
 // PROVIDER
 import { WebPProvider } from '../frontend/components/Context/WebP';
 import { RouterProvider } from '../frontend/components/Context/Router';
+import { DeviceProvider } from '../frontend/components/Context/Device';
 
 import Loader from '../frontend/components/Loader/PageLoader';
+
+import mobileHeight from '../frontend/functions/mobileHeight';
 
 import '../frontend/gsap/imports';
 
@@ -25,6 +28,7 @@ export default class MyApp extends App {
     if(this.props.support && this.props.statusCode === 200) {
       require('intersection-observer');
       
+      mobileHeight();
       this.createPageTransitionDOM();
     }
   }
@@ -55,13 +59,14 @@ export default class MyApp extends App {
       return (
         <RouterProvider>
           <WebPProvider>
-            <Container>
-              {this.state.showLoader
-              ? <Loader removeMe={this.removeLoader} />
-              : null
-              }
+            <DeviceProvider>
+              <Container>
+                {this.state.showLoader
+                  ? <Loader removeMe={this.removeLoader} />
+                  : null}
                 <Component {...pageProps} loader={this.state.showLoader} />
-            </Container>    
+              </Container>   
+            </DeviceProvider> 
           </WebPProvider>
         </RouterProvider>
       );

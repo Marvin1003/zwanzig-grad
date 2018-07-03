@@ -166,10 +166,6 @@ export default class SnakeNSwitch extends React.Component {
       const [x, y] = this.getPositions(clientX, clientY, i);
 
       this.data.mouse = [clientX, clientY];
-      
-      const random = Math.random() * 0.75 + 0.5;
-      const duration = (random / (i + 1)).toFixed(2);
-
       TweenLite.to(this.ref.images[i], i *  0.2, { x, y, xPercent: -50, yPercent: -50, ease: 'Power1.easeOut', delay: i * 0.0005 });      
     }
     
@@ -186,7 +182,6 @@ export default class SnakeNSwitch extends React.Component {
 
   getPositions(x, y, i) {
     const target = window.APP.autoScrolling ? window.APP.prevSection : window.APP.nextSection;
-
     const minX = (this.data.dim[target][i].px.width / 2);
     const minY = (this.data.dim[target][i].px.height / 2);
     const maxX = this.ref.rect.width - (this.data.dim[target][i].px.width / 2)
@@ -201,13 +196,11 @@ export default class SnakeNSwitch extends React.Component {
   imageSwitch(clientX, clientY) {
     // SET PROPER ZINDEX
     this.index = (this.index + 1) % this.ref.images.length;
-    
     if(this.data.zIndex === this.ref.images.length) {
       this.data.zIndex = 1;
-      TweenLite.set(this.ref.images, { zIndex: 1 });
-    }
-    else
-      this.ref.images[this.index].style.zIndex = this.data.zIndex += 1;
+      this.ref.images.forEach(({ parentNode }) => TweenLite.set(parentNode, { zIndex: 1 }));
+    } else 
+      this.ref.images[this.index].parentNode.style.zIndex = this.data.zIndex += 1;
   }
 
   render() {

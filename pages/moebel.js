@@ -8,7 +8,7 @@ import style from '../frontend/styles/pages/moebel';
 export default () => (
   <App title="Möbel" next="Innenausbau" type="topic">
     <style jsx>{style}</style>
-    <section className="section sec_two_möbel">
+    <section className="section sec_two_moebel">
       <Lazy
         lazy={false}
         master={2}
