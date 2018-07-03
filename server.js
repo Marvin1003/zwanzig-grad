@@ -36,6 +36,7 @@ app.prepare().then(() => {
       const filePath = join(__dirname, '.next', pathname);
       return app.serveStatic(req, res, filePath);
     }
+    
     return handle(req, res, parsedUrl);
   });
 
