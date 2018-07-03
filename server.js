@@ -48,7 +48,6 @@ app.prepare().then(() => {
         ? '<strong>XSS Blocked</strong>' 
         : sanitize;
     }
-    
     require('./backend/email.js')(req.body, res);
   });
 
