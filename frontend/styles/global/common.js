@@ -1,6 +1,6 @@
 import css from 'styled-jsx/css';
 
-export default css`
+export default css.global`
   //-------------------------------------
 
   @import './node_modules/modularscale-sass/stylesheets/modularscale';

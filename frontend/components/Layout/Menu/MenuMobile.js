@@ -1,5 +1,4 @@
 import style from '../../../styles/components/mobile/menuMobile';
-import Link from '../../Utility/Link';
 
 export default class extends React.Component {
   menuItems = this.props.menuItems.map(elem => (

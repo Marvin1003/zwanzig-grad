@@ -1,0 +1,12 @@
+{
+	"name": "zwanzig-grad",
+	"short_name": "zwanzig-grad",
+	"icons": {
+		"cache": true
+	},
+	"start_url": "/?utm_source=web_app_manifest",
+	"display": "standalone",
+	"orientation": "natural",
+	"background_color": "#FFFFFF",
+	"theme_color": "#FFFFFF"
+}
