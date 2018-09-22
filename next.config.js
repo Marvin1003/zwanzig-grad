@@ -17,7 +17,7 @@ module.exports = withBundleAnalyzer(
       },
       manifest: {
         icons: {
-          // src: 'static/images/logo/logo-256x256.png',
+          src: 'static/images/logo/logo-256x256.png',
           cache: true
         }
       },

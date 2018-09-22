@@ -7,7 +7,6 @@ import SecOne from './Sections/SecOne';
 import SecNext from './Sections/SecNext';
 import mobileHeight from '../functions/mobileHeight';
 
-
 const Topic = (props) => (
   <div className="parallax">
     <SecOne title={props.title} />
