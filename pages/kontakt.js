@@ -1,13 +1,13 @@
-import App from '../frontend/components/App';
+import App from "components/App";
 
-import GoogleMap from '../frontend/components/Utility/GoogleMaps';
-import Form from '../frontend/components/Contact/Form';
+import GoogleMap from "components/Utility/GoogleMaps/GoogleMaps";
+import Form from "components/Form/Form";
 
-import style from '../frontend/styles/pages/kontakt';
+import styles from "styles/pages/kontakt";
 
 export default () => (
   <App title="Kontakt">
-    <style jsx>{style}</style>
+    <style jsx>{styles}</style>
     <div className="container futura_normal">
       <div className="wrapper layout_wrapper mobile_height">
         <h2 className="quattrocento_normal kontakt_header">Kontakt</h2>
@@ -17,7 +17,9 @@ export default () => (
             <span>zwanzig-grad / </span>
             <span>wertherstr. 310 / </span>
             <span>33619 bielefeld / </span>
-            <span><a href="tel:0171 - 6668888">0171 - 6668888</a></span>
+            <span>
+              <a href="tel:0171 - 6668888">0171 - 6668888</a>
+            </span>
           </address>
         </div>
       </div>

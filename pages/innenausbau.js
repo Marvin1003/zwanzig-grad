@@ -1,13 +1,13 @@
-import App from '../frontend/components/App';
+import App from 'components/App';
 
-import Lazy from '../frontend/components/Utility/LazyLoading';
-import Button from '../frontend/animation/components/hover/ButtonHover';
+import Lazy from 'components/Utility/LazyLoading';
+import Button from 'components/Hover/Button/Button';
 
-import style from '../frontend/styles/pages/innenausbau';
+import styles from 'styles/pages/innenausbau';
 
 export default () => (
   <App title="Innenausbau" next="Parkett" type="topic">
-    <style jsx>{style}</style>
+    <style jsx>{styles}</style>
     <section className="section sec_two_innenausbau">
       <Lazy
         lazy={false}

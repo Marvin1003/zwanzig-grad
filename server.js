@@ -31,7 +31,8 @@ app.prepare().then(() => {
 
     if (pathname === "/service-worker.js") {
       const filePath = join(__dirname, ".next", pathname);
-      return app.serveStatic(req, res, filePath);
+
+      app.serveStatic(req, res, filePath);
     }
 
     return handle(req, res, parsedUrl);

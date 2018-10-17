@@ -1,231 +1,179 @@
-import { PureComponent } from "react";
+import { Component } from "react";
 import dynamic from "next/dynamic";
 
-import App from "../frontend/components/App";
+import { RouterContext } from "components/Context/Router";
+import { WebPContext } from "components/Context/WebP";
+import { DeviceContext } from "components/Context/Device";
 
-import { RouterContext } from "../frontend/components/Context/Router";
-import { WebPContext } from "../frontend/components/Context/WebP";
-import { DeviceContext } from "../frontend/components/Context/Device";
+import App from "components/App";
 
-import Link from "../frontend/components/Utility/Link";
+import TextAnimation from "components/TextAnimation/TextAnimation";
+import Indicator from "components/Indicator/Indicator";
 
-// ANIMATION
-const SnakeNSwitch = dynamic(
-  import("../frontend/animation/components/SnakeNSwitch"),
-  { loading: () => null }
-);
+import Link from "components/Utility/Link";
 
-import SVGCircle from "../frontend/animation/components/hover/SVGCircle";
+import Arrows from "components/Arrows/Arrows";
 
-// FUNCTIONS
-import autoScroll from "../frontend/functions/autoScroll";
-import nextTopic from "../frontend/animation/nextTopic";
-import runOnce from "../frontend/functions/runOnce";
+import styles from "styles/pages/index";
 
-import images from "../static/json/homeImages.json";
+const Slider = dynamic(import("components/Slider/Slider"), { ssr: false });
+const SliderRef = React.forwardRef((props, ref) => (
+  <Slider {...props} forwardedRef={ref} />
+));
 
-import style from "../frontend/styles/pages/index";
+class Home extends Component {
+  headline = React.createRef();
+  indicator = React.createRef();
+  arrows = React.createRef();
+  slider = React.createRef();
 
-class Home extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { currentLink: null };
-    // REFS
-    this.container = React.createRef();
-    this.current = React.createRef();
-    this.amount = React.createRef();
-    this.headlineWrapper = React.createRef();
-    this.subTextWrapper = React.createRef();
+  allow = true;
+  threshold = 50;
+  running = false;
 
-    this.headlines = [];
-    this.colors = [];
+  duration = 1;
 
-    for (const key in images.source) {
-      this.colors.push(images.source[key].color);
-      this.headlines.push(key);
-    }
+  touch = {
+    prev: null,
+    curr: null
+  };
 
-    this.initialTextAnimation = runOnce(this.initialTextAnimation);
-    this.autoScroll = runOnce(autoScroll);
+  state = {
+    current: 0,
+    running: false,
+    ready: false
+  };
 
-    this.pointer = null;
-  }
-
-  componentDidMount() {
-    this.setState({ currentLink: this.headlines[window.APP.nextSection] });
-
-    window.APP.sectionAmount = Object.keys(images.source).length;
-    window.APP.nextTopic = nextTopic.bind(this, this.headlines, this.colors);
-
-    // FIX SOME CASES
-    if (window.APP.menu) window.APP.menu = false;
-
-    // INITIAL
-    this.current.current.innerText = `0${window.APP.nextSection + 1}`;
-    this.amount.current.innerText = `0${window.APP.sectionAmount}`;
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.mime && !this.props.loader) {
-      this.autoScroll();
-      this.cursorPreperation();
-    }
-
-    // UPDATE CURRENT LINK
-    if (
-      prevProps.menu !== this.props.menu ||
-      (prevProps.device !== this.props.device && this.props.mime)
-    ) {
-      this.toggleCursor();
-    }
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.props.loader && this.state.ready)
+      this.toggleEventListener("addEventListener");
   }
 
   componentWillUnmount() {
-    TweenLite.set("*", { clearProps: "cursor" });
-    if (this.props.device === "desktop") {
-      window.removeEventListener("mousedown", this.play);
-      window.removeEventListener("mouseup", this.reverse);
-      window.removeEventListener("contextmenu", this.reverse);
-      window.removeEventListener("mousemove", this.moveCursor);
-    }
+    this.toggleEventListener("removeEventListener");
   }
 
-  cursorPreperation = () => {
-    if (this.props.device === "desktop") {
-      this.cursor = document.getElementsByClassName("cursor_home")[0];
-      this.circle = this.cursor.querySelector("circle");
+  toggleEventListener(type) {
+    window[type]("wheel", this.autoScroll);
+    window[type]("touchend", this.autoScroll);
+    window[type]("keyup", this.autoScroll);
+    window[type]("touchstart", this.safePrevTouch);
+    window[type]("touchmove", this.preventDefault, {
+      passive: false
+    });
+  }
 
-      TweenLite.set("*:not(.pointer)", { cursor: "none" });
-      window.addEventListener("mousemove", this.moveCursor);
+  setReady = () => {
+    this.setState({ ready: true });
+  };
 
-      const handleComplete = () => {
-        if (!this.props.menu && !this.pointer) {
-          window.removeEventListener("mouseup", this.reverse);
-          this.props.nextRoute(this.state.currentLink);
+  preventDefault(e) {
+    e.preventDefault();
+  }
+
+  autoScroll = e => {
+    const type = e.type;
+
+    switch (type) {
+      case "wheel":
+        const currY = e.deltaY;
+
+        if (Math.abs(currY) > this.threshold && this.allow) {
+          this.allow = false;
+
+          if (currY < 0) this.updateSlider("prev");
+          else if (currY > 0) this.updateSlider("next");
         } else {
-          this.reverse();
+          this.allow = true;
         }
-      };
+        break;
+      case "touchend":
+        this.touch.curr = e.changedTouches[0];
 
-      this.tween = TweenLite.fromTo(
-        this.circle,
-        1.5,
-        { alpha: 1 },
-        {
-          strokeDashoffset: 0,
-          ease: Power0.easeNone,
-          paused: true,
-          onComplete: handleComplete
+        const xDiff = Math.abs(
+          this.touch.curr.clientX - this.touch.prev.clientX
+        );
+        const yDiff = Math.abs(
+          this.touch.curr.clientY - this.touch.prev.clientY
+        );
+
+        if (xDiff > this.threshold || yDiff > this.threshold) {
+          if (yDiff > xDiff) {
+            if (this.touch.curr.clientY > this.touch.prev.clientY)
+              this.updateSlider("prev");
+            else if (this.touch.curr.clientY < this.touch.prev.clientY)
+              this.updateSlider("next");
+          }
+          if (xDiff > yDiff) {
+            if (this.touch.curr.clientX < this.touch.prev.clientX)
+              this.updateSlider("next");
+            else if (this.touch.curr.clientX > this.touch.prev.clientX)
+              this.updateSlider("prev");
+          }
         }
-      );
-      window.addEventListener("mousedown", this.play);
-      window.addEventListener("mouseup", this.reverse);
-      window.addEventListener("contextmenu", this.reverse);
+        break;
+      case "keyup":
+        if (e.keyCode === 38 || e.keyCode === 37) this.updateSlider("prev");
+        else if (e.keyCode === 40 || e.keyCode === 39 || e.keyCode === 32)
+          this.updateSlider("next");
+        break;
     }
   };
 
-  play = () => {
-    !window.APP.autoScrolling && !this.pointer && this.animateCircle("play");
+  safePrevTouch = e => {
+    this.touch.prev = e.changedTouches[0];
   };
 
-  reverse = () => {
-    !window.APP.autoScrolling && this.animateCircle("reverse");
-  };
+  updateSlider = (type, diashow = true) => {
+    if (!this.state.running) {
+      this.setState({ running: true });
+      this.slider.current.slide(type);
+      this.headline.current.update(type);
+      this.indicator.current.update(type);
 
-  animateCircle = type => {
-    if (this.props.device === "desktop") {
-      if (type === "play") this.tween.play();
-      else this.tween.reverse();
+      if (diashow) this.arrows.current.slide(type);
     }
   };
 
-  toggleCursor = () => {
-    if (window.APP.menu || this.props.device === "mobile") {
-      try {
-        TweenLite.set("*", { clearProps: "cursor" });
-        TweenLite.set(this.cursor, { display: "none" });
-      } catch (e) {}
-      window.removeEventListener("mousemove", this.moveCursor);
-    } else {
-      try {
-        TweenLite.set("*:not(.pointer)", { cursor: "none" });
-        TweenLite.set(this.cursor, { display: "initial" });
-      } catch (e) {}
-      window.addEventListener("mousemove", this.moveCursor);
-    }
+  updateCurrent = val => {
+    this.setState(({ current }) => {
+      if (current !== val) {
+        return { current: val, running: false };
+      }
+      return null;
+    });
   };
-
-  moveCursor = e => {
-    if (this.cursor) {
-      this.pointer = e.target.classList.contains("pointer");
-      TweenLite.set(this.cursor, {
-        display: "initial",
-        x: e.clientX,
-        y: e.clientY,
-        xPercent: -50,
-        yPercent: -50
-      });
-
-      this.pointer
-        ? TweenLite.set(this.cursor, { visibility: "hidden" })
-        : TweenLite.set(this.cursor, { visibility: "visible" });
-    }
-  };
-
-  updateCurrentLink = () => {
-    this.setState(
-      prevState =>
-        prevState.currentLink !== this.headlines[window.APP.nextSection]
-          ? { currentLink: this.headlines[window.APP.nextSection] }
-          : null
-    );
-  };
-
-  routeHandler = () => {
-    if (window.innerWidth <= 1024) {
-      this.props.nextRoute(this.state.currentLink);
-    }
-  };
-
-  renderComponent(device) {
-    if (device === "desktop") {
-      return (
-        <>
-          <SVGCircle
-            hover={false}
-            currentLink={this.state.currentLink}
-            className="cursor_home"
-          />
-          <div ref={this.container} className="snake_container">
-            <SnakeNSwitch
-              currentLink={this.state.currentLink}
-              wrapper={this.container}
-              images={images.source}
-              sets={images.sizes}
-              loader={this.props.loader}
-            />
-          </div>
-        </>
-      );
-    }
-    return null;
-  }
 
   render() {
     return (
       <App title="Home" header="header_home" className="layout_wrapper">
-        <style jsx>{style}</style>
+        <style jsx global>
+          {styles}
+        </style>
         <div className="layout futura_normal">
-          <div className="topic_container" onClick={this.routeHandler}>
-            <h1 className="topic quattrocento_normal" />
-          </div>
-          <div className="current_section side">
-            <span ref={this.current} className="sec_current" />/
-            <span ref={this.amount} className="sec_amount" />
-          </div>
+          {/* <Cursor /> */}
+          <TextAnimation
+            ref={this.headline}
+            current={this.state.current}
+            duration={this.duration}
+            nextRoute={this.props.nextRoute}
+          />
+          <Indicator
+            ref={this.indicator}
+            current={this.state.current}
+            duration={this.duration}
+            length={4}
+          />
           <div className="home_buttons side">
-            <SVGCircle hover={true} className="prev svg_hover pointer" />
-            <SVGCircle hover={true} className="next svg_hover pointer" />
+            {this.state.ready && (
+              <Arrows
+                ref={this.arrows}
+                running={this.state.running}
+                updateSlider={this.updateSlider}
+                duration={this.duration}
+                loader={this.props.loader}
+              />
+            )}
           </div>
           {/* <Link className="left links" href="">werte</Link> */}
           <a className="left links pointer font_medium">team</a>
@@ -233,34 +181,19 @@ class Home extends PureComponent {
             kontakt
           </Link>
         </div>
-        <div className="home_container">
-          <Background content={this.headlines} mime={this.props.mime} />
-        </div>
-        {this.renderComponent(this.props.device)}
+        <SliderRef
+          ref={this.slider}
+          current={this.state.current}
+          updateCurrent={this.updateCurrent}
+          length={4}
+          duration={this.duration}
+          mime={this.props.mime}
+          setReady={this.setReady}
+        />
       </App>
     );
   }
 }
-
-const Background = ({ content, mime }) => {
-  if (mime) {
-    return content.map((image, i) => (
-      <section
-        className="section_background_wrapper"
-        key={image}
-        style={{ overflow: "hidden", visibility: "hidden" }}
-      >
-        <section
-          className="background_center section_background"
-          style={{
-            backgroundImage: `url(../../static/images/${image}/5${mime})`
-          }}
-        />
-      </section>
-    ));
-  }
-  return null;
-};
 
 export default props => (
   <RouterContext.Consumer>
@@ -275,3 +208,42 @@ export default props => (
     )}
   </RouterContext.Consumer>
 );
+
+// componentDidMount() {
+//   this.setState({ currentLink: this.headlines[window.APP.nextSection] });
+
+//   window.APP.sectionAmount = Object.keys(images.source).length;
+//   window.APP.nextTopic = nextTopic.bind(this, this.headlines, this.colors);
+
+//   // FIX SOME CASES
+//   if (window.APP.menu) window.APP.menu = false;
+
+//   // INITIAL
+//   this.current.current.innerText = `0${window.APP.nextSection + 1}`;
+//   this.amount.current.innerText = `0${window.APP.sectionAmount}`;
+// }
+
+// componentDidUpdate(prevProps) {
+//   // if (this.props.mime && !this.props.loader) {
+//   //   this.autoScroll();
+//   //   this.cursorPreperation();
+//   // }
+
+//   // UPDATE CURRENT LINK
+//   if (
+//     prevProps.menu !== this.props.menu ||
+//     (prevProps.device !== this.props.device && this.props.mime)
+//   ) {
+//     this.toggleCursor();
+//   }
+// }
+
+// componentWillUnmount() {
+//   TweenLite.set("*", { clearProps: "cursor" });
+//   if (this.props.device === "desktop") {
+//     window.removeEventListener("mousedown", this.play);
+//     window.removeEventListener("mouseup", this.reverse);
+//     window.removeEventListener("contextmenu", this.reverse);
+//     window.removeEventListener("mousemove", this.moveCursor);
+//   }
+// }
