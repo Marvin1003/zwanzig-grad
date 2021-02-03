@@ -13,10 +13,6 @@
     "analyze_server": "BUNDLE_ANALYZE=server npm run build",
     "analyze_browser": "BUNDLE_ANALYZE=browser npm run build"
   },
-  "engines": {
-    "node": "12.x",
-    "npm": "6.0.1"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
