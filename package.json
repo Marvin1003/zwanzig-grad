@@ -14,7 +14,7 @@
     "analyze_browser": "BUNDLE_ANALYZE=browser npm run build"
   },
   "engines": {
-    "node": "9.6.1",
+    "node": "12.x",
     "npm": "6.0.1"
   },
   "author": "",
