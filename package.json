@@ -33,7 +33,7 @@
     "next": "^7.0.0",
     "next-manifest": "^1.6.0",
     "next-offline": "^2.13.1",
-    "nodemailer": "^4.6.8",
+    "nodemailer": "^6.4.16",
     "react": "^16.5.2",
     "react-async-script": "^1.0.0",
     "react-dom": "^16.5.2",
